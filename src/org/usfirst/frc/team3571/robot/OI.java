@@ -21,10 +21,10 @@ public class OI extends RobotMap {
 
 	public static final RobotDrive drive = new RobotDrive(PWM.FRONT_LEFT_DRIVE_MOTOR, PWM.REAR_LEFT_DRIVE_MOTOR,
 			PWM.FRONT_RIGHT_DRIVE_MOTOR,PWM.REAR_RIGHT_DRIVE_MOTOR);
-	public static final Talon shooter = new Talon(PWM.SHOOTER);
-	public static final Talon intake = new Talon(PWM.INTAKE);
-	public static final Talon climber1 = new Talon(PWM.FRONT_CLIMBER);
-	public static final Talon climber2 = new Talon(PWM.REAR_CLIMBER);
+	//public static final Talon shooter = new Talon(PWM.SHOOTER);
+	//public static final Talon intake = new Talon(PWM.INTAKE);
+	//public static final Talon climber1 = new Talon(PWM.FRONT_CLIMBER);
+	//public static final Talon climber2 = new Talon(PWM.REAR_CLIMBER);
 	public static final AnalogInput proximityAnalog = new AnalogInput(Analog.PROXIMITY_ANALOG);
 	public static final DigitalOutput agitator = new DigitalOutput(Digital.AGITATOR);
 	public static final DigitalInput limit_button = new DigitalInput(Digital.LIMIT_GEAR);

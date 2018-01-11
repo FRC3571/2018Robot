@@ -82,6 +82,8 @@ public class Teleop extends OI {
 		{
 		gear = false;
 		}
+		
+		/* Removed by D. Bonin 10-JAN-18
 		if (driver.Buttons.LB.changedDown){
 			climber1.set(-.2);
 			climber2.set(-.2);
@@ -98,7 +100,7 @@ public class Teleop extends OI {
 			climber1.set(0);
 			climber2.set(0);
 		}
-		
+		*/
 		
 		// Controls which Axis controls the robot base drive
 	if (triggerDrive) {
