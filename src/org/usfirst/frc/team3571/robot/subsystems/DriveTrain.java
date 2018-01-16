@@ -114,7 +114,7 @@ public class DriveTrain extends Subsystem {
 	 */
 	public void drive(XboxController xbox) {
 		drive(-xbox.getY(GenericHID.Hand.kLeft), xbox.getY(GenericHID.Hand.kRight));
-		//drive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getY(GenericHID.Hand.kLeft));
+		//drive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getY(GenericHID.Hand.kLeft)); //left joystick
 	}
 
 	/**
