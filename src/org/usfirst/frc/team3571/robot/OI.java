@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -28,10 +29,8 @@ public class OI extends RobotMap {
 	private static final Spark RearLeftDriveMotor = new Spark(PWM.REAR_LEFT_DRIVE_MOTOR);
 	private static final Spark RearRightDriveMotor = new Spark(PWM.REAR_RIGHT_DRIVE_MOTOR);
 	// Join Motor Controllers
-	private static final MotorControllerJoint LeftDrive = new MotorControllerJoint(FrontLeftDriveMotor,
-			RearLeftDriveMotor);
-	private static final MotorControllerJoint RightDrive = new MotorControllerJoint(FrontRightDriveMotor,
-			RearRightDriveMotor);
+	private static final SpeedControllerGroup LeftDrive = new SpeedControllerGroup(FrontLeftDriveMotor, RearLeftDriveMotor);
+	private static final SpeedControllerGroup RightDrive = new SpeedControllerGroup(FrontRightDriveMotor, RearRightDriveMotor);
 	/** Robot DriveBase */
 	public static final DifferentialDrive drive = new DifferentialDrive(LeftDrive, RightDrive);
 	// public static final Talon shooter = new Talon(PWM.SHOOTER);
