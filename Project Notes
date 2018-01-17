@@ -1,10 +1,19 @@
-Subsystems
--drivetrain
--gyro
--pneumatics
--vision
+Use this text file to keep on going notes and assigned work. 
+If someone from the build team asks that we place a control
+or create a new subsystem, please take time to pu some notes 
+into this document. 
+
+SUBSYSTEMS:
+------------
+-drivetrain (Omar)
+-gyro (??)
+-pneumatics (Jason)
+-vision (??)
+-forklift (??)
 
 
--gear shifter
--limit switches
+SENSORS AND CONTROLS:
+-----------------------
+-gear shifter pneumatic (Jason)
+-limit switches (??)
 -
