@@ -7,11 +7,13 @@
 
 package org.usfirst.frc.team3571.robot;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 //import edu.wpi.first.wpilibj.Spark;
 //import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 //import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -32,12 +34,24 @@ public class Robot extends IterativeRobot {
 	public static DriveTrain m_drivetrain;
 	public static OI m_oi;
 	
+	//gyro fields
+	private AnalogGyro gyro;
+	private final int GYRO_PORT = 1;
+	private final double kAngleSetpoint = 0.0;
+	private final double kVoltsPerDegreePerSecond = 0.0128;
+	private final double kP = 0.005;
+
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
+		//gyro
+		gyro = new AnalogGyro(GYRO_PORT);
+		gyro.setSensitivity(kVoltsPerDegreePerSecond);
+		
 		// Initialize all subsystems
 		m_drivetrain = new DriveTrain();
 		m_oi = new OI();
@@ -78,6 +92,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		//gyro
+		double turningValue = (kAngleSetpoint - gyro.getAngle()) * kP;
+		// Invert the direction of the turn if we are going backwards
 		Scheduler.getInstance().run();
 		log();
 	}
