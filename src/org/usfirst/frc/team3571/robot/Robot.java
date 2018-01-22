@@ -94,6 +94,8 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		//gyro
 		double turningValue = (kAngleSetpoint - gyro.getAngle()) * kP;
+		//forums said there's a place to read roborio logs(from the default output stream)
+		System.out.println("GYRO LOG: " + turningValue);
 		// Invert the direction of the turn if we are going backwards
 		Scheduler.getInstance().run();
 		log();
