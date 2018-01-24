@@ -7,13 +7,15 @@
 
 package org.usfirst.frc.team3571.robot;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.Compressor;
+//import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
 //import edu.wpi.first.wpilibj.Spark;
 //import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
+//import edu.wpi.first.wpilibj.interfaces.Gyro;
 //import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -35,12 +37,20 @@ public class Robot extends IterativeRobot {
 	public static OI m_oi;
 	
 	//gyro fields
-	private AnalogGyro gyro;
-	private final int GYRO_PORT = 1;
-	private final double kAngleSetpoint = 0.0;
-	private final double kVoltsPerDegreePerSecond = 0.0128;
-	private final double kP = 0.005;
+	//private AnalogGyro gyro;
+	//private final int GYRO_PORT = 1;
+	//private final double kAngleSetpoint = 0.0;
+	//private final double kVoltsPerDegreePerSecond = 0.0128;
+	//private final double kP = 0.005;
+	
+	private final static byte MPU6050_ADDRESS = 0x68;
+    private final static int REGISTER_PWR_MGMT_1 = 0x6B;
+    private final static int REGISTER_GYRO = 0x43;
 
+    private I2C accelerometer = new I2C(I2C.Port.kOnboard, MPU6050_ADDRESS);
+    private byte[] buffer = new byte[6];
+
+    private Compressor c = new Compressor(0);
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -49,8 +59,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		//gyro
-		gyro = new AnalogGyro(GYRO_PORT);
-		gyro.setSensitivity(kVoltsPerDegreePerSecond);
+		//gyro = new AnalogGyro(GYRO_PORT);
+		//gyro.setSensitivity(kVoltsPerDegreePerSecond);
+		// Take the accelerometer out of sleep mode
+        accelerometer.write(REGISTER_PWR_MGMT_1, 0);
+		
 		
 		// Initialize all subsystems
 		m_drivetrain = new DriveTrain();
@@ -93,9 +106,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		//gyro
-		double turningValue = (kAngleSetpoint - gyro.getAngle()) * kP;
+		//double turningValue = (kAngleSetpoint - gyro.getAngle()) * kP;
 		//forums said there's a place to read roborio logs(from the default output stream)
-		System.out.println("GYRO LOG: " + turningValue);
+		//System.out.println("GYRO LOG: " + turningValue);
 		// Invert the direction of the turn if we are going backwards
 		Scheduler.getInstance().run();
 		log();
@@ -106,7 +119,27 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		// Read the gyro measurements (6 bytes)
+	    accelerometer.read(REGISTER_GYRO, 6, buffer);
+
+	    // Convert the raw bytes into measurements in degrees per second
+	    double x = gyroFromBytes(buffer[0], buffer[1]);
+	    double y = gyroFromBytes(buffer[2], buffer[3]);
+	    double z = gyroFromBytes(buffer[4], buffer[5]);
+	  
+	    System.out.println(x + "," + y + "," + z);
+
+	    c.setClosedLoopControl(true);
+	    //c.setClosedLoopControl(false);
 	}
+	
+	/** Adapted from {@link ADXL345_I2C#accelFromBytes} */
+	private double gyroFromBytes(byte first, byte second) {
+	    short tempLow = (short) (first & 0xff);
+	    short tempHigh = (short) ((second << 8) & 0xff00);
+	    return (tempLow | tempHigh) * 0.004;
+	}
+
 
 	/**
 	 * The log method puts interesting information to the SmartDashboard.

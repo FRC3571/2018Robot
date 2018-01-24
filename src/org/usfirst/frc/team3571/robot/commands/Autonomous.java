@@ -14,10 +14,13 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class Autonomous extends CommandGroup {
 	public Autonomous() {
-		//addSequential(new PrepareToPickup());
-		//addSequential(new Pickup());
-		//addSequential(new SetDistanceToBox(0.10));
-		// addSequential(new DriveStraight(4)); // Use Encoders if ultrasonic is
+		
+		// Usage: DriveStraightTimed(float timeout, float speed) 
+		addSequential(new DriveStraightTimed(4, 0.5)); // use a timed event to drive straight
+		addSequential(new DriveStraightTimed(4, -0.5)); // use negative for reverse
+		//addSequential(new DriveStraightDistance(4)); // Use Encoders if ultrasonic is
+		
+		
 		// broken
 		//addSequential(new Place());
 		//addSequential(new SetDistanceToBox(0.60));

@@ -19,10 +19,10 @@ import org.usfirst.frc.team3571.robot.Robot;
  * command is running. The input is the averaged values of the left and right
  * encoders.
  */
-public class DriveStraight extends Command {
+public class DriveStraightDistance extends Command {
 	private PIDController m_pid;
 
-	public DriveStraight(double distance) {
+	public DriveStraightDistance(double distance) {
 		requires(Robot.m_drivetrain);
 		m_pid = new PIDController(4, 0, 0, new PIDSource() {
 			PIDSourceType m_sourceType = PIDSourceType.kDisplacement;
