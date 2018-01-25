@@ -9,7 +9,7 @@ package org.usfirst.frc.team3571.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
 //import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.I2C;
+//import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
 //import edu.wpi.first.wpilibj.Spark;
 //import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3571.robot.commands.Autonomous;
 import org.usfirst.frc.team3571.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team3571.utilities.MPU6050;
 
 
 /**
@@ -43,12 +44,13 @@ public class Robot extends IterativeRobot {
 	//private final double kVoltsPerDegreePerSecond = 0.0128;
 	//private final double kP = 0.005;
 	
-	private final static byte MPU6050_ADDRESS = 0x68;
-    private final static int REGISTER_PWR_MGMT_1 = 0x6B;
-    private final static int REGISTER_GYRO = 0x43;
+	//private final static byte MPU6050_ADDRESS = 0x68;
+    //private final static int REGISTER_PWR_MGMT_1 = 0x6B;
+    //private final static int REGISTER_GYRO = 0x43;
 
-    private I2C accelerometer = new I2C(I2C.Port.kOnboard, MPU6050_ADDRESS);
-    private byte[] buffer = new byte[6];
+    //private I2C accelerometer = new I2C(I2C.Port.kOnboard, MPU6050_ADDRESS);
+    //private byte[] buffer = new byte[6];
+	private MPU6050 gyro = new MPU6050();
 
     private Compressor c = new Compressor(0);
 	
@@ -62,7 +64,7 @@ public class Robot extends IterativeRobot {
 		//gyro = new AnalogGyro(GYRO_PORT);
 		//gyro.setSensitivity(kVoltsPerDegreePerSecond);
 		// Take the accelerometer out of sleep mode
-        accelerometer.write(REGISTER_PWR_MGMT_1, 0);
+        //gyro.write(REGISTER_PWR_MGMT_1, 0);
 		
 		
 		// Initialize all subsystems
@@ -119,27 +121,29 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		
+		//GYRO
 		// Read the gyro measurements (6 bytes)
-	    accelerometer.read(REGISTER_GYRO, 6, buffer);
-
+	    gyro.readGyro();
 	    // Convert the raw bytes into measurements in degrees per second
-	    double x = gyroFromBytes(buffer[0], buffer[1]);
-	    double y = gyroFromBytes(buffer[2], buffer[3]);
-	    double z = gyroFromBytes(buffer[4], buffer[5]);
+	    //double x = gyroFromBytes(buffer[0], buffer[1]);
+	    //double y = gyroFromBytes(buffer[2], buffer[3]);
+	    //double z = gyroFromBytes(buffer[4], buffer[5]);
 	  
-	    System.out.println(x + "," + y + "," + z);
+	    System.out.println(gyro.getX());
 
+	    //PNEUMATICS
 	    c.setClosedLoopControl(true);
 	    //c.setClosedLoopControl(false);
 	}
 	
-	/** Adapted from {@link ADXL345_I2C#accelFromBytes} */
+	/** Adapted from {@link ADXL345_I2C#accelFromBytes} 
 	private double gyroFromBytes(byte first, byte second) {
 	    short tempLow = (short) (first & 0xff);
 	    short tempHigh = (short) ((second << 8) & 0xff00);
 	    return (tempLow | tempHigh) * 0.004;
 	}
-
+*/
 
 	/**
 	 * The log method puts interesting information to the SmartDashboard.
