@@ -80,7 +80,7 @@ public class MPU6050 extends SensorBase implements Sendable, Accelerometer, Gyro
 	 * Construct MPU6050 using defaults connected to the onboard port
 	 */
 	public MPU6050() {
-		this(DEFAULT_I2C_PORT, 0, false);
+		this(DEFAULT_I2C_PORT, 9, false);
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class MPU6050 extends SensorBase implements Sendable, Accelerometer, Gyro
 	 *            The last bit of the address of the device
 	 */
 	public MPU6050(boolean selectionBit) {
-		this(DEFAULT_I2C_PORT, 0, selectionBit);
+		this(DEFAULT_I2C_PORT, 9, selectionBit);
 
 	}
 
@@ -103,7 +103,7 @@ public class MPU6050 extends SensorBase implements Sendable, Accelerometer, Gyro
 	 *            The last bit of the address of the device
 	 */
 	public MPU6050(I2C.Port i2cPort, boolean selectionBit) {
-		this(DEFAULT_I2C_PORT, 0, selectionBit);
+		this(DEFAULT_I2C_PORT, 9, selectionBit);
 
 	}
 
