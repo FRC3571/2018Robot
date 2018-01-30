@@ -134,11 +134,12 @@ public class MPU6050 extends SensorBase implements Sendable, Accelerometer, Gyro
 		sensor = new I2C(i2cPort, MPU6050_ADDRESS | (selectionBit ? 1 : 0));
 
 		setSampleRateDiv(sampleRateDiv);
-		sensor.write(REG.CONFIG, (0 << 3) + 2); // Set EXT_SYNC to OFF and Digital Low Pass Filter to 94Hz for Accel and
+		sensor.write(REG.CONFIG, 2); // Set EXT_SYNC to OFF and Digital Low Pass Filter to 94Hz for Accel and
 												// 98 for Gyro
 		setRange(Range.k4G, GyroRange.k500deg);
 		sensor.write(REG.FIFO_EN, GYRO_FIFO_EN); // Enable FIFO buffer for Gyro
 		sensor.write(REG.USER_CTRL, FIFO_ENABLE); // Enable FIFO buffer and disable I2C master
+		reset();
 		sensor.write(REG.PWR_MGMT_1, 1); // Use X Gyro as clock reference and wake up
 
 	}
@@ -371,7 +372,6 @@ public class MPU6050 extends SensorBase implements Sendable, Accelerometer, Gyro
 	private ByteBuffer getData(int address, int bytes) {
 		ByteBuffer buffer = ByteBuffer.allocate(bytes);
 		sensor.read(address, bytes, buffer);
-		buffer.order(ByteOrder.LITTLE_ENDIAN);
 		return buffer;
 	}
 
@@ -382,7 +382,7 @@ public class MPU6050 extends SensorBase implements Sendable, Accelerometer, Gyro
 
 		ByteBuffer buffer = ByteBuffer.allocate(len);
 		sensor.read(REG.FIFO_R_W, len, buffer);
-		for (int i = 0; i < len; i += 6) {
+		for (int i = 0; i <= len - 6; i += 6) {
 			xGyro += getGyroVal(buffer, i) * secondsPerSample;
 			yGyro += getGyroVal(buffer, i + 2) * secondsPerSample;
 			zGyro += getGyroVal(buffer, i + 4) * secondsPerSample;
@@ -392,7 +392,7 @@ public class MPU6050 extends SensorBase implements Sendable, Accelerometer, Gyro
 	private int getFIFOLength() {
 		ByteBuffer buffer = ByteBuffer.allocate(2);
 		sensor.read(REG.FIFO_COUNT_H, 2, buffer);
-		return (((int) buffer.get(0)) << 4) + buffer.get(1);
+		return (((int) buffer.get(0)) << 8) + buffer.get(1);
 	}
 
 	public class AccelData {
@@ -449,7 +449,7 @@ public class MPU6050 extends SensorBase implements Sendable, Accelerometer, Gyro
 	private enum Sensors {
 		Accel(REG.ACCEL_XOUT_H, 6), AccelX(REG.ACCEL_XOUT_H, 2), AccelY(REG.ACCEL_YOUT_H, 2), AccelZ(REG.ACCEL_ZOUT_H,
 				2), Temp(REG.TEMP_OUT_H, 2), Gyro(REG.GYRO_XOUT_H, 6), GyroX(REG.GYRO_XOUT_H,
-						2), GyroY(REG.GYRO_YOUT_H, 2), GyroZ(REG.GYRO_ZOUT_H, 2), All(REG.ACCEL_XOUT_H, 18);
+						2), GyroY(REG.GYRO_YOUT_H, 2), GyroZ(REG.GYRO_ZOUT_H, 2), All(REG.ACCEL_XOUT_H, 14);
 
 		int bytes, start;
 
