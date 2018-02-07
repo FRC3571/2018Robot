@@ -7,20 +7,18 @@
 
 package org.usfirst.frc.team3571.robot.subsystems;
 
-import edu.wpi.first.wpilibj.GenericHID;
-//import edu.wpi.first.wpilibj.AnalogGyro;
-//import edu.wpi.first.wpilibj.AnalogInput;
-//import edu.wpi.first.wpilibj.Encoder;
-//import edu.wpi.first.wpilibj.Joystick;
+
 import edu.wpi.first.wpilibj.Spark;
-//import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.XboxController;
+import org.usfirst.frc.team3571.robot.utilities.XboxController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
 //import org.usfirst.frc.team3571.robot.Robot;
+import org.usfirst.frc.team3571.robot.RobotMap.PWM;
 import org.usfirst.frc.team3571.robot.commands.TankDriveWithXboxControl;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team3571.robot.utilities.MPU6050;
 
 /**
  * The DriveTrain subsystem incorporates the sensors and actuators attached to
@@ -31,14 +29,14 @@ public class DriveTrain extends Subsystem {
 	
 	//Six motor drivetrain:	 
 	
-	private Spark m_frontLeft = new Spark(0);
-	private Spark m_midLeft = new Spark(1);
-	private Spark m_rearLeft = new Spark(2);
+	private Spark m_frontLeft = new Spark(PWM.FRONT_LEFT_DRIVE_MOTOR);
+	private Spark m_midLeft = new Spark(PWM.MIDDLE_LEFT_DRIVE_MOTOR);
+	private Spark m_rearLeft = new Spark(PWM.REAR_LEFT_DRIVE_MOTOR);
 	private SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_midLeft, m_rearLeft);
 
-	private Spark m_frontRight = new Spark(3);
-	private Spark m_midRight = new Spark(4);
-	private Spark m_rearRight = new Spark(5);
+	private Spark m_frontRight = new Spark(PWM.FRONT_RIGHT_DRIVE_MOTOR);
+	private Spark m_midRight = new Spark(PWM.MIDDLE_RIGHT_DRIVE_MOTOR);
+	private Spark m_rearRight = new Spark(PWM.REAR_RIGHT_DRIVE_MOTOR);
 	private SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_midRight, m_rearRight);
 
 	private DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
@@ -47,11 +45,14 @@ public class DriveTrain extends Subsystem {
 	//private Encoder m_leftEncoder = new Encoder(1, 2);
 	//private Encoder m_rightEncoder = new Encoder(3, 4);
 	//private AnalogInput m_rangefinder = new AnalogInput(6);
-	//private AnalogGyro m_gyro = new AnalogGyro(1);
+	private MPU6050 m_gyro = new MPU6050();
 
 	public DriveTrain() {
 		super();
 
+		//Middle motor may need to travel in opposite direction to others based on gearbox design
+		m_midLeft.setInverted(true);
+		
 		// Encoders may measure differently in the real world and in
 		// simulation. In this example the robot moves 0.042 barleycorns
 		// per tick in the real world, but the simulated encoders
@@ -67,12 +68,13 @@ public class DriveTrain extends Subsystem {
 			m_rightEncoder.setDistancePerPulse((4.0 / 12.0 * Math.PI) / 360.0);
 		}
 		*/
+		
 		// Let's name the sensors on the LiveWindow
 		addChild("Drive", m_drive);
 		//addChild("Left Encoder", m_leftEncoder);
 		//addChild("Right Encoder", m_rightEncoder);
 		//addChild("Rangefinder", m_rangefinder);
-		//addChild("Gyro", m_gyro);
+		addChild("Gyro", m_gyro);
 	}
 
 	/**
@@ -113,8 +115,8 @@ public class DriveTrain extends Subsystem {
 	 * @param xbox The XboxController use to drive tank style.
 	 */
 	public void drive(XboxController xbox) {
-		drive(-xbox.getY(GenericHID.Hand.kLeft), xbox.getY(GenericHID.Hand.kRight));
-		//drive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getY(GenericHID.Hand.kLeft)); //left joystick
+		//drive(-xbox.getY(GenericHID.Hand.kLeft), xbox.getY(GenericHID.Hand.kRight));	
+		drive(-xbox.LeftStick.Y, -xbox.RightStick.Y);
 	}
 
 	/**
@@ -123,14 +125,14 @@ public class DriveTrain extends Subsystem {
 	 * @return The robots heading in degrees.
 	 */
 	public double getHeading() {
-		return 0;//m_gyro.getAngle();
+		return m_gyro.getAngle();
 	}
 
 	/**
 	 * Reset the robots sensors to the zero states.
 	 */
 	public void reset() {
-		//m_gyro.reset();
+		m_gyro.reset();
 		//m_leftEncoder.reset();
 		//m_rightEncoder.reset();
 	}

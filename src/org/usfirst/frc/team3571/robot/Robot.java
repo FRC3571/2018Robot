@@ -8,20 +8,16 @@
 package org.usfirst.frc.team3571.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
-//import edu.wpi.first.wpilibj.AnalogGyro;
-//import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
-//import edu.wpi.first.wpilibj.Spark;
-//import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-//import edu.wpi.first.wpilibj.interfaces.Gyro;
-//import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.usfirst.frc.team3571.robot.commands.Autonomous;
 import org.usfirst.frc.team3571.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team3571.utilities.MPU6050;
+import org.usfirst.frc.team3571.robot.utilities.MPU6050;
+import org.usfirst.frc.team3571.robot.utilities.XboxController;
+import org.usfirst.frc.team3571.robot.utilities.XboxController.StickSides;
 
 
 /**
@@ -33,26 +29,14 @@ import org.usfirst.frc.team3571.utilities.MPU6050;
  */
 public class Robot extends IterativeRobot {
 	Command m_autonomousCommand;
-
+	
 	public static DriveTrain m_drivetrain;
 	public static OI m_oi;
-	
-	//gyro fields
-	//private AnalogGyro gyro;
-	//private final int GYRO_PORT = 1;
-	//private final double kAngleSetpoint = 0.0;
-	//private final double kVoltsPerDegreePerSecond = 0.0128;
-	//private final double kP = 0.005;
-	
-	//private final static byte MPU6050_ADDRESS = 0x68;
-    //private final static int REGISTER_PWR_MGMT_1 = 0x6B;
-    //private final static int REGISTER_GYRO = 0x43;
+	public static XboxController xbox;
+	public MPU6050 gyro = new MPU6050();
 
-    //private I2C accelerometer = new I2C(I2C.Port.kOnboard, MPU6050_ADDRESS);
-    //private byte[] buffer = new byte[6];
-	private MPU6050 gyro = new MPU6050();
-
-    private Compressor c = new Compressor(0);
+    //private Compressor c = new Compressor(0);
+	private Encoder enc = new Encoder(0,1);
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -60,11 +44,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		//gyro
-		//gyro = new AnalogGyro(GYRO_PORT);
-		//gyro.setSensitivity(kVoltsPerDegreePerSecond);
-		// Take the accelerometer out of sleep mode
-        //gyro.write(REGISTER_PWR_MGMT_1, 0);
 		
 		
 		// Initialize all subsystems
@@ -73,6 +52,7 @@ public class Robot extends IterativeRobot {
 
 		// instantiate the command used for the autonomous period
 		m_autonomousCommand = new Autonomous();
+		xbox = m_oi.getXboxControl();
 
 		// Show what command your subsystem is running on the SmartDashboard
 		SmartDashboard.putData(m_drivetrain);
@@ -99,7 +79,7 @@ public class Robot extends IterativeRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		m_autonomousCommand.cancel();
+		m_autonomousCommand.cancel();		
 	}
 
 	/**
@@ -107,11 +87,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		//gyro
-		//double turningValue = (kAngleSetpoint - gyro.getAngle()) * kP;
-		//forums said there's a place to read roborio logs(from the default output stream)
-		//System.out.println("GYRO LOG: " + turningValue);
-		// Invert the direction of the turn if we are going backwards
+		m_oi.refreshAll();
 		Scheduler.getInstance().run();
 		log();
 	}
@@ -120,30 +96,35 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during test mode.
 	 */
 	@Override
-	public void testPeriodic() {
+	public void testPeriodic(){
+		//Testing xbox buttons, joysticks and triggers
+		m_oi.refreshAll();
+		//System.out.println("Left Y = " + xbox.LeftStick.Y);
+		//System.out.println("Right Y = " + xbox.RightStick.Y);
+		//System.out.println("Left X = " + xbox.LeftStick.X);
+		//System.out.println("Right X = " + xbox.RightStick.X);
+		if(xbox.Buttons.A.changedDown){
+			System.out.println("Button A = " + xbox.Buttons.A.changedDown);
+		} else if(xbox.Buttons.B.changedUp){
+			System.out.println("Button B = " + xbox.Buttons.B.changedDown);
+		}
 		
-		//GYRO
-		// Read the gyro measurements (6 bytes)
-	    gyro.readGyro();
-	    // Convert the raw bytes into measurements in degrees per second
-	    //double x = gyroFromBytes(buffer[0], buffer[1]);
-	    //double y = gyroFromBytes(buffer[2], buffer[3]);
-	    //double z = gyroFromBytes(buffer[4], buffer[5]);
-	  
-	    System.out.println(gyro.getX());
+		
+		final double cpr = 360.0;
+		final double encoder_angular_distance_per_pulse = 2.0*Math.PI / cpr;
+		final double wheel_radius = 2.5;  // .564 in (18T 5mm pitch)
+		final double encLinearDistancePerPulse = wheel_radius * encoder_angular_distance_per_pulse; //2.0 * Math.PI / cpr;
+		
+		System.out.println(enc.getRaw()*encLinearDistancePerPulse);
+		
+		
+		//System.out.println(gyro.getAngle(MPU6050.Axis.X));
 
 	    //PNEUMATICS
-	    c.setClosedLoopControl(true);
+	    //c.setClosedLoopControl(true);
 	    //c.setClosedLoopControl(false);
 	}
 	
-	/** Adapted from {@link ADXL345_I2C#accelFromBytes} 
-	private double gyroFromBytes(byte first, byte second) {
-	    short tempLow = (short) (first & 0xff);
-	    short tempHigh = (short) ((second << 8) & 0xff00);
-	    return (tempLow | tempHigh) * 0.004;
-	}
-*/
 
 	/**
 	 * The log method puts interesting information to the SmartDashboard.
