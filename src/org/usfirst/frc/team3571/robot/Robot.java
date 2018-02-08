@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team3571.robot.commands.Autonomous;
+import org.usfirst.frc.team3571.robot.command.Autonomous;
 import org.usfirst.frc.team3571.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3571.robot.utilities.MPU6050;
 import org.usfirst.frc.team3571.robot.utilities.XboxController;
