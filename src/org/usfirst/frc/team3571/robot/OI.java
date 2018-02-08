@@ -1,59 +1,44 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package org.usfirst.frc.team3571.robot;
 
-import org.usfirst.frc.team3571.robot.utilities.*;
+import org.usfirst.frc.team3571.robot.RobotMap.DEFAULT;
+import org.usfirst.frc.team3571.robot.RobotMap.DriverUSB;
+import org.usfirst.frc.team3571.robot.commands.Autonomous;
+import org.usfirst.frc.team3571.robot.commands.DriveStraightTimed;
+import org.usfirst.frc.team3571.robot.utilities.XboxController;
+import org.usfirst.frc.team3571.robot.utilities.XboxController.Button;
+import org.usfirst.frc.team3571.robot.utilities.XboxController.CommandState;
 
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI extends RobotMap {
+public class OI {
+	
+	public static final XboxController driver = new XboxController(DriverUSB.DRIVER_CONTROLLER, DEFAULT.CONTROLLER_DEADZONE);
+	
+	
+	public OI() {
+		// Put Some buttons on the SmartDashboard
+		//SmartDashboard.putData("Deliver Soda", new Autonomous());  
 
-	public static final XboxController driver = new XboxController(DriverUSB.DRIVER_CONTROLLER,
-			DEFAULT.CONTROLLER_DEADZONE);
-	public static final XboxController operator = new XboxController(DriverUSB.OPERATOR_CONTROLLER,
-			DEFAULT.CONTROLLER_DEADZONE);
-
-	// Drive Motors
-	private static final Spark FrontLeftDriveMotor = new Spark(PWM.FRONT_LEFT_DRIVE_MOTOR);
-	private static final Spark FrontRightDriveMotor = new Spark(PWM.FRONT_RIGHT_DRIVE_MOTOR);
-	private static final Spark RearLeftDriveMotor = new Spark(PWM.REAR_LEFT_DRIVE_MOTOR);
-	private static final Spark RearRightDriveMotor = new Spark(PWM.REAR_RIGHT_DRIVE_MOTOR);
-	// Join Motor Controllers
-	private static final SpeedControllerGroup LeftDrive = new SpeedControllerGroup(FrontLeftDriveMotor, RearLeftDriveMotor);
-	private static final SpeedControllerGroup RightDrive = new SpeedControllerGroup(FrontRightDriveMotor, RearRightDriveMotor);
-	/** Robot DriveBase */
-	public static final DifferentialDrive drive = new DifferentialDrive(LeftDrive, RightDrive);
-	// public static final Talon shooter = new Talon(PWM.SHOOTER);
-	// public static final Talon intake = new Talon(PWM.INTAKE);
-	// public static final Talon climber1 = new Talon(PWM.FRONT_CLIMBER);
-	// public static final Talon climber2 = new Talon(PWM.REAR_CLIMBER);
-	public static final AnalogInput proximityAnalog = new AnalogInput(Analog.PROXIMITY_ANALOG);
-	public static final DigitalOutput agitator = new DigitalOutput(Digital.AGITATOR);
-	public static final DigitalInput limit_button = new DigitalInput(Digital.LIMIT_GEAR);
-	public static final CameraModule cameras = new CameraModule();
-	/**
-	 * Calls All Refresh Methods
-	 */
-
-	public static final Gyro gyro = new ADXRS450_Gyro();
-
+		driver.Buttons.A.runCommand(new DriveStraightTimed(5,0.5), CommandState.WhenPressed); 
+		
+	}
+	
 	public static void refreshAll() {
 		driver.refresh();
-		operator.refresh();
 	}
-
-	/** Returns distance in mm **/
-	public static double getDistance() {
-		return ((double) proximityAnalog.getValue() * 1.24941) + 0.10889;
+	
+	public XboxController getXboxControl() {
+		return driver;
 	}
 }
