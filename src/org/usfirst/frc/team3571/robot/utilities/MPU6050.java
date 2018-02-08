@@ -386,11 +386,11 @@ public class MPU6050 extends SensorBase implements Sendable, Accelerometer, Gyro
 			test=1;
 			if (len == 0)
 				return;
-			System.out.println(len);
+			//System.out.println(len);
 			buffer = ByteBuffer.allocate(len);
 			test=2;
 			sensor.read(REG.FIFO_R_W, len, buffer);
-			System.out.println(Arrays.toString(buffer.array()));
+			//System.out.println(Arrays.toString(buffer.array()));
 			test=3;
 			for (i = 0; i <= len-6; i += 6) {
 				xGyro += getGyroVal(buffer, i) * secondsPerSample;
