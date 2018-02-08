@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 //import org.usfirst.frc.team3571.robot.Robot;
 import org.usfirst.frc.team3571.robot.RobotMap.PWM;
-import org.usfirst.frc.team3571.robot.commands.TankDriveWithXboxControl;
+import org.usfirst.frc.team3571.robot.command.TankDriveWithXboxControl;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team3571.robot.utilities.MPU6050;
 
