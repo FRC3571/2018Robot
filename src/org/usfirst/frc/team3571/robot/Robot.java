@@ -33,10 +33,10 @@ public class Robot extends IterativeRobot {
 	public static DriveTrain m_drivetrain;
 	public static OI m_oi;
 	public static XboxController xbox;
-	public MPU6050 gyro = new MPU6050();
-
+	
+	//public MPU6050 gyro = new MPU6050();
     //private Compressor c = new Compressor(0);
-	private Encoder enc = new Encoder(0,1);
+	//private Encoder enc = new Encoder(0,1);
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -87,7 +87,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		m_oi.refreshAll();
+		OI.refreshAll();
 		Scheduler.getInstance().run();
 		log();
 	}
@@ -98,25 +98,18 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic(){
 		//Testing xbox buttons, joysticks and triggers
-		m_oi.refreshAll();
-		//System.out.println("Left Y = " + xbox.LeftStick.Y);
-		//System.out.println("Right Y = " + xbox.RightStick.Y);
-		//System.out.println("Left X = " + xbox.LeftStick.X);
-		//System.out.println("Right X = " + xbox.RightStick.X);
-		if(xbox.Buttons.A.changedDown){
-			System.out.println("Button A = " + xbox.Buttons.A.changedDown);
-		} else if(xbox.Buttons.B.changedUp){
-			System.out.println("Button B = " + xbox.Buttons.B.changedDown);
-		}
-		
-		
-		final double cpr = 360.0;
-		final double encoder_angular_distance_per_pulse = 2.0*Math.PI / cpr;
-		final double wheel_radius = 2.5;  // .564 in (18T 5mm pitch)
-		final double encLinearDistancePerPulse = wheel_radius * encoder_angular_distance_per_pulse; //2.0 * Math.PI / cpr;
-		
-		System.out.println(enc.getRaw()*encLinearDistancePerPulse);
-		
+		OI.refreshAll();
+//		//System.out.println("Left Y = " + xbox.LeftStick.Y);
+//		//System.out.println("Right Y = " + xbox.RightStick.Y);
+//		
+//		
+//		final double cpr = 360.0;
+//		final double encoder_angular_distance_per_pulse = 2.0*Math.PI / cpr;
+//		final double wheel_radius = 2.5;  // .564 in (18T 5mm pitch)
+//		final double encLinearDistancePerPulse = wheel_radius * encoder_angular_distance_per_pulse; //2.0 * Math.PI / cpr;
+//		
+//		System.out.println(enc.getRaw()*encLinearDistancePerPulse);
+//		
 		
 		//System.out.println(gyro.getAngle(MPU6050.Axis.X));
 

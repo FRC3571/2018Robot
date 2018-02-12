@@ -8,6 +8,7 @@
 package org.usfirst.frc.team3571.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import org.usfirst.frc.team3571.robot.utilities.XboxController;
@@ -15,7 +16,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 //import org.usfirst.frc.team3571.robot.Robot;
-import org.usfirst.frc.team3571.robot.RobotMap.PWM;
+import org.usfirst.frc.team3571.robot.RobotMap;
 import org.usfirst.frc.team3571.robot.command.TankDriveWithXboxControl;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team3571.robot.utilities.MPU6050;
@@ -29,21 +30,29 @@ public class DriveTrain extends Subsystem {
 	
 	//Six motor drivetrain:	 
 	
-	private Spark m_frontLeft = new Spark(PWM.FRONT_LEFT_DRIVE_MOTOR);
-	private Spark m_midLeft = new Spark(PWM.MIDDLE_LEFT_DRIVE_MOTOR);
-	private Spark m_rearLeft = new Spark(PWM.REAR_LEFT_DRIVE_MOTOR);
+	private Spark m_frontLeft = new Spark(RobotMap.PWM.FRONT_LEFT_DRIVE_MOTOR);
+	private Spark m_midLeft = new Spark(RobotMap.PWM.MIDDLE_LEFT_DRIVE_MOTOR);
+	private Spark m_rearLeft = new Spark(RobotMap.PWM.REAR_LEFT_DRIVE_MOTOR);
 	private SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_midLeft, m_rearLeft);
 
-	private Spark m_frontRight = new Spark(PWM.FRONT_RIGHT_DRIVE_MOTOR);
-	private Spark m_midRight = new Spark(PWM.MIDDLE_RIGHT_DRIVE_MOTOR);
-	private Spark m_rearRight = new Spark(PWM.REAR_RIGHT_DRIVE_MOTOR);
+	private Spark m_frontRight = new Spark(RobotMap.PWM.FRONT_RIGHT_DRIVE_MOTOR);
+	private Spark m_midRight = new Spark(RobotMap.PWM.MIDDLE_RIGHT_DRIVE_MOTOR);
+	private Spark m_rearRight = new Spark(RobotMap.PWM.REAR_RIGHT_DRIVE_MOTOR);
 	private SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_midRight, m_rearRight);
 
 	private DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
 	
 
-	//private Encoder m_leftEncoder = new Encoder(1, 2);
-	//private Encoder m_rightEncoder = new Encoder(3, 4);
+	private Encoder leftEncoder = new Encoder(RobotMap.ENCODER.FRONT_LEFT_ENCODER_CHANNEL_A, 
+												RobotMap.ENCODER.FRONT_LEFT_ENCODER_CHANNEL_B, 
+												RobotMap.ENCODER.REVERSE_DIRECTION,
+												RobotMap.ENCODER.ENCODER_TYPE);
+	
+	private Encoder rightEncoder = new Encoder(RobotMap.ENCODER.FRONT_RIGHT_ENCODER_CHANNEL_A, 
+												 RobotMap.ENCODER.FRONT_RIGHT_ENCODER_CHANNEL_B, 
+												 RobotMap.ENCODER.FORWARD_DIRECTION,
+												 RobotMap.ENCODER.ENCODER_TYPE);
+	
 	//private AnalogInput m_rangefinder = new AnalogInput(6);
 	private MPU6050 m_gyro = new MPU6050();
 
@@ -51,7 +60,16 @@ public class DriveTrain extends Subsystem {
 		super();
 
 		//Middle motor may need to travel in opposite direction to others based on gearbox design
-		m_midLeft.setInverted(true);
+		m_midLeft.setInverted(RobotMap.PWM.MOTOR_INVERTED);
+		m_midRight.setInverted(RobotMap.PWM.MOTOR_INVERTED);
+		
+		final double countsPerRevolution = RobotMap.ENCODER.COUNTS_PER_REVOLUTION;
+		final double wheel_radius = RobotMap.ENCODER.WHEEL_RADIUS;
+		final double encoder_angular_distance_per_pulse = 2.0*Math.PI/countsPerRevolution;
+		final double encoderLinearDistancePerPulse = wheel_radius * encoder_angular_distance_per_pulse;
+		
+		leftEncoder.setDistancePerPulse(encoderLinearDistancePerPulse);
+		rightEncoder.setDistancePerPulse(encoderLinearDistancePerPulse);
 		
 		// Encoders may measure differently in the real world and in
 		// simulation. In this example the robot moves 0.042 barleycorns
@@ -60,19 +78,19 @@ public class DriveTrain extends Subsystem {
 		// real robot to handle this difference in devices.
 		/*
 		if (Robot.isReal()) {
-			m_leftEncoder.setDistancePerPulse(0.042);
-			m_rightEncoder.setDistancePerPulse(0.042);
+			leftEncoder.setDistancePerPulse(0.042);
+			rightEncoder.setDistancePerPulse(0.042);
 		} else {
 			// Circumference in ft = 4in/12(in/ft)*PI
-			m_leftEncoder.setDistancePerPulse((4.0 / 12.0 * Math.PI) / 360.0);
-			m_rightEncoder.setDistancePerPulse((4.0 / 12.0 * Math.PI) / 360.0);
+			leftEncoder.setDistancePerPulse((4.0 / 12.0 * Math.PI) / 360.0);
+			rightEncoder.setDistancePerPulse((4.0 / 12.0 * Math.PI) / 360.0);
 		}
 		*/
 		
 		// Let's name the sensors on the LiveWindow
 		addChild("Drive", m_drive);
-		//addChild("Left Encoder", m_leftEncoder);
-		//addChild("Right Encoder", m_rightEncoder);
+		addChild("Left Encoder", leftEncoder);
+		addChild("Right Encoder", rightEncoder);
 		//addChild("Rangefinder", m_rangefinder);
 		addChild("Gyro", m_gyro);
 	}
@@ -90,11 +108,11 @@ public class DriveTrain extends Subsystem {
 	 * The log method puts interesting information to the SmartDashboard.
 	 */
 	public void log() {
-		//SmartDashboard.putNumber("Left Distance", m_leftEncoder.getDistance());
-		//SmartDashboard.putNumber("Right Distance", m_rightEncoder.getDistance());
-		//SmartDashboard.putNumber("Left Speed", m_leftEncoder.getRate());
-		//SmartDashboard.putNumber("Right Speed", m_rightEncoder.getRate());
-		//SmartDashboard.putNumber("Gyro", m_gyro.getAngle());
+		SmartDashboard.putNumber("Left Distance", leftEncoder.getDistance());
+		SmartDashboard.putNumber("Right Distance", rightEncoder.getDistance());
+		SmartDashboard.putNumber("Left Speed", leftEncoder.getRate());
+		SmartDashboard.putNumber("Right Speed", rightEncoder.getRate());
+		SmartDashboard.putNumber("Gyro", m_gyro.getAngle());
 	}
 
 	/**
@@ -133,8 +151,8 @@ public class DriveTrain extends Subsystem {
 	 */
 	public void reset() {
 		m_gyro.reset();
-		//m_leftEncoder.reset();
-		//m_rightEncoder.reset();
+		leftEncoder.reset();
+		rightEncoder.reset();
 	}
 
 	/**
@@ -143,7 +161,7 @@ public class DriveTrain extends Subsystem {
 	 * @return The distance driven (average of left and right encoders).
 	 */
 	public double getDistance() {
-		return 0;//(m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2;
+		return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2;
 	}
 
 	/**
