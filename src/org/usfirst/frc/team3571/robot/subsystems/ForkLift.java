@@ -19,7 +19,7 @@ public class ForkLift extends Subsystem {
 	@Override
 	protected void initDefaultCommand() {
 		tiltMotor.set(0.5);
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method 
 	}
 
 }
