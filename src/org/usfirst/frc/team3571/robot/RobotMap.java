@@ -41,11 +41,12 @@ public class RobotMap {
 	public static class ENCODER{
 		public static final int FRONT_LEFT_ENCODER_CHANNEL_A = 0;
 		public static final int FRONT_LEFT_ENCODER_CHANNEL_B = 1;
-		//public static final int FRONT_LEFT_ENCODER_CHANNEL_X = 3;//index
+		//public static final int FRONT_LEFT_ENCODER_CHANNEL_X = 2;//index
 		public static final int FRONT_RIGHT_ENCODER_CHANNEL_A = 3;
 		public static final int FRONT_RIGHT_ENCODER_CHANNEL_B = 4;
-		//public static final int FRONT_RIGHT_ENCODER_CHANNEL_X = 6;//index
+		//public static final int FRONT_RIGHT_ENCODER_CHANNEL_X = 5;//index
 		public static final boolean REVERSE_DIRECTION = true;
+		public static final boolean FORWARD_DIRECTION = false;
 		public static final EncodingType ENCODER_TYPE = EncodingType.k1X;
 		public static final double COUNTS_PER_REVOLUTION = 2048.0;
 		public static final double WHEEL_RADIUS = 63.5;//in millimetres
