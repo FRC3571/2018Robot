@@ -3,6 +3,10 @@ package org.usfirst.frc.team3571.robot;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 
+/**
+ * @author bonind
+ *
+ */
 public class RobotMap {
 	
 	public static class PWM {
@@ -52,11 +56,22 @@ public class RobotMap {
 		public static final double WHEEL_RADIUS = 63.5;//in millimetres
 	}
 	
+	/*
+	 * Each solenoid needs an integer identifier for the array use in Pneumatics. (i.e. GEAR_SHIFT_LEFT)
+	 * Each physical solenoid on the robot needs to have a DIO assigned to it. (i.e. SOLENOID_ID_1)
+	 */
 	public static class PNEUMATICS{
 		public static final int PUMP_ID = 0;
-		public static final int GEARSHIFT_SOLENOID; 
-		public static final int SOLENOID_ID_1;
-		public static final int SOLENOID_ID_2;
+		public static final int GEARSHIFT_SOLENOID = 0;
+		public static final int INTAKE_SOLENOID = 1;
+		public static final int RAMP_SOLENOID_LEFT = 4;
+		public static final int RAMP_SOLENOID_RIGHT = 5;
+		public static final int SOLENOID_ID_1 = 2;
+		public static final int SOLENOID_ID_2 = 3;
+		//public static final int SOLENOID_ID_3 = 3;
+		//public static final int SOLENOID_ID_4 = 3;
+		//public static final int SOLENOID_ID_5 = 3;
+		//public static final int SOLENOID_ID_6 = 3;
 	}
 	
 	public static class DEFAULT{

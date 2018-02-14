@@ -15,10 +15,7 @@ public class Pneumatics extends Subsystem {
 	//boolean enabled = c.enabled();
 	//boolean pressureSwitch = c.getPressureSwitchValue();
 	//double current = c.getCompressorCurrent();
-	//DoubleSolenoid exampleDouble = new DoubleSolenoid(1, 2);
-	//exampleDouble.set(DoubleSolenoid.Value.kOff);
-	//exampleDouble.set(DoubleSolenoid.Value.kForward);
-	//exampleDouble.set(DoubleSolenoid.Value.kReverse);
+	
 
 	public Pneumatics(){
 		c = new Compressor(RobotMap.PNEUMATICS.PUMP_ID);
