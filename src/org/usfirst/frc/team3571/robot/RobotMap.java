@@ -52,6 +52,13 @@ public class RobotMap {
 		public static final double WHEEL_RADIUS = 63.5;//in millimetres
 	}
 	
+	public static class PNEUMATICS{
+		public static final int PUMP_ID = 0;
+		public static final int GEARSHIFT_SOLENOID; 
+		public static final int SOLENOID_ID_1;
+		public static final int SOLENOID_ID_2;
+	}
+	
 	public static class DEFAULT{
 		public static final double CONTROLLER_DEADZONE = 0.25;
 	}

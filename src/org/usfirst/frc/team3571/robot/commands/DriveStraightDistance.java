@@ -21,6 +21,7 @@ import org.usfirst.frc.team3571.robot.Robot;
  */
 public class DriveStraightDistance extends Command {
 	private PIDController m_pid;
+	private double speed;
 
 	public DriveStraightDistance(double distance) {
 		requires(Robot.m_drivetrain);
@@ -41,12 +42,17 @@ public class DriveStraightDistance extends Command {
 			public PIDSourceType getPIDSourceType() {
 				return m_sourceType;
 			}
-		}, d -> Robot.m_drivetrain.drive(d, d));
+		}, d -> Robot.m_drivetrain.drive(speed*d, speed*d));
 
-		m_pid.setAbsoluteTolerance(0.01);
+		m_pid.setAbsoluteTolerance(0.1);
 		m_pid.setSetpoint(distance);
 	}
 
+	public DriveStraightDistance(double distance, double speed) {
+		this(distance);
+		this.speed = speed;
+	}
+	
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {

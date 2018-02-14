@@ -8,6 +8,7 @@
 package org.usfirst.frc.team3571.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team3571.robot.commands.Autonomous;
 import org.usfirst.frc.team3571.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team3571.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team3571.robot.utilities.MPU6050;
 import org.usfirst.frc.team3571.robot.utilities.XboxController;
 import org.usfirst.frc.team3571.robot.utilities.XboxController.StickSides;
@@ -31,12 +33,12 @@ public class Robot extends IterativeRobot {
 	Command m_autonomousCommand;
 	
 	public static DriveTrain m_drivetrain;
+	public static Pneumatics m_pneumatics;
 	public static OI m_oi;
 	public static XboxController xbox;
-	public MPU6050 gyro = new MPU6050();
-
+	//public MPU6050 gyro = new MPU6050();
     //private Compressor c = new Compressor(0);
-	private Encoder enc = new Encoder(0,1);
+	//private Encoder enc = new Encoder(0,1,true,EncodingType.k1X);
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -48,6 +50,7 @@ public class Robot extends IterativeRobot {
 		
 		// Initialize all subsystems
 		m_drivetrain = new DriveTrain();
+		m_pneumatics = new Pneumatics();
 		m_oi = new OI();
 
 		// instantiate the command used for the autonomous period
@@ -56,7 +59,7 @@ public class Robot extends IterativeRobot {
 
 		// Show what command your subsystem is running on the SmartDashboard
 		SmartDashboard.putData(m_drivetrain);
-		
+			
 	}
 
 	@Override
@@ -87,7 +90,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		m_oi.refreshAll();
+		OI.refreshAll();
 		Scheduler.getInstance().run();
 		log();
 	}
@@ -98,7 +101,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic(){
 		//Testing xbox buttons, joysticks and triggers
-		m_oi.refreshAll();
+		OI.refreshAll();
 		//System.out.println("Left Y = " + xbox.LeftStick.Y);
 		//System.out.println("Right Y = " + xbox.RightStick.Y);
 		//System.out.println("Left X = " + xbox.LeftStick.X);
@@ -110,12 +113,13 @@ public class Robot extends IterativeRobot {
 		}
 		
 		
-		final double cpr = 360.0;
-		final double encoder_angular_distance_per_pulse = 2.0*Math.PI / cpr;
-		final double wheel_radius = 2.5;  // .564 in (18T 5mm pitch)
-		final double encLinearDistancePerPulse = wheel_radius * encoder_angular_distance_per_pulse; //2.0 * Math.PI / cpr;
+		final double countsPerRevolution = 2048.0;
+		final double encoder_angular_distance_per_pulse = 2.0*Math.PI / countsPerRevolution;
+		final double wheel_radius = 63.5; //mm;
+		final double encLinearDistancePerPulse = wheel_radius * encoder_angular_distance_per_pulse; 
 		
-		System.out.println(enc.getRaw()*encLinearDistancePerPulse);
+		//enc.setDistancePerPulse(encLinearDistancePerPulse);
+		
 		
 		
 		//System.out.println(gyro.getAngle(MPU6050.Axis.X));
