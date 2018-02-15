@@ -46,8 +46,8 @@ public class RobotMap {
 		public static final int FRONT_LEFT_ENCODER_CHANNEL_A = 0;
 		public static final int FRONT_LEFT_ENCODER_CHANNEL_B = 1;
 		//public static final int FRONT_LEFT_ENCODER_CHANNEL_X = 2;//index
-		public static final int FRONT_RIGHT_ENCODER_CHANNEL_A = 3;
-		public static final int FRONT_RIGHT_ENCODER_CHANNEL_B = 4;
+		public static final int FRONT_RIGHT_ENCODER_CHANNEL_A = 2;
+		public static final int FRONT_RIGHT_ENCODER_CHANNEL_B = 3;
 		//public static final int FRONT_RIGHT_ENCODER_CHANNEL_X = 5;//index
 		public static final boolean REVERSE_DIRECTION = true;
 		public static final boolean FORWARD_DIRECTION = false;

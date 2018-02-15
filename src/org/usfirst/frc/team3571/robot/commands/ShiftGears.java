@@ -7,21 +7,28 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class ShiftGears extends Command {
 	
-	public ShiftGears(){	
+	public ShiftGears(){
+		System.out.println("ShiftGears starting ...");
 		 requires(Robot.m_pneumatics);
+		 Robot.m_pneumatics.createSolenoid(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID, 
+					RobotMap.PNEUMATICS.SOLENOID_ID_1, 
+					RobotMap.PNEUMATICS.SOLENOID_ID_2);
 	}
-
 	
 	// Called just before this Command runs the first time
-    protected void initialize() {
-    	Robot.m_pneumatics.createSolenoid(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID, 
-    									RobotMap.PNEUMATICS.SOLENOID_ID_1, 
-    									RobotMap.PNEUMATICS.SOLENOID_ID_2);
+	@Override
+    protected void initialize() {	
     }
     
-    public void shiftGears(){
-    	Robot.m_pneumatics.solenoidForward(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID);
+    @Override
+    public void start(){
+    	if(!Robot.m_pneumatics.getShiftState()){
+    		Robot.m_pneumatics.solenoidForward(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID);
+    	} else if(Robot.m_pneumatics.getShiftState()){
+    		Robot.m_pneumatics.solenoidReverse(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID);
+    	}
     }
+    
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {	
