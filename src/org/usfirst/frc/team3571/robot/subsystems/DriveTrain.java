@@ -19,14 +19,17 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import org.usfirst.frc.team3571.robot.RobotMap;
 import org.usfirst.frc.team3571.robot.command.TankDriveWithXboxControl;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team3571.robot.utilities.Loggable;
 import org.usfirst.frc.team3571.robot.utilities.MPU6050;
+import org.usfirst.frc.team3571.robot.utilities.RobotMath;
 
 /**
  * The DriveTrain subsystem incorporates the sensors and actuators attached to
  * the robots chassis. These include four drive motors, a left and right encoder
  * and a gyro.
  */
-public class DriveTrain extends Subsystem {
+public class DriveTrain extends Subsystem implements Loggable {
 	
 	//Six motor drivetrain:	 
 	
@@ -63,10 +66,11 @@ public class DriveTrain extends Subsystem {
 		m_midLeft.setInverted(RobotMap.PWM.MOTOR_INVERTED);
 		m_midRight.setInverted(RobotMap.PWM.MOTOR_INVERTED);
 		
-		final double countsPerRevolution = RobotMap.ENCODER.COUNTS_PER_REVOLUTION;
-		final double wheel_radius = RobotMap.ENCODER.WHEEL_RADIUS;
-		final double encoder_angular_distance_per_pulse = 2.0*Math.PI/countsPerRevolution;
-		final double encoderLinearDistancePerPulse = wheel_radius * encoder_angular_distance_per_pulse;
+//		final double countsPerRevolution = RobotMap.ENCODER.COUNTS_PER_REVOLUTION;
+//		final double wheel_radius = RobotMap.ENCODER.WHEEL_RADIUS;
+//		final double encoder_angular_distance_per_pulse = 2.0*Math.PI/countsPerRevolution;
+		final double encoderLinearDistancePerPulse = RobotMath.getDistancePerPulse(RobotMap.ENCODER.COUNTS_PER_REVOLUTION, 
+				RobotMap.ENCODER.WHEEL_RADIUS);
 		
 		leftEncoder.setDistancePerPulse(encoderLinearDistancePerPulse);
 		rightEncoder.setDistancePerPulse(encoderLinearDistancePerPulse);
@@ -107,6 +111,7 @@ public class DriveTrain extends Subsystem {
 	/**
 	 * The log method puts interesting information to the SmartDashboard.
 	 */
+	@Override
 	public void log() {
 		SmartDashboard.putNumber("Left Distance", leftEncoder.getDistance());
 		SmartDashboard.putNumber("Right Distance", rightEncoder.getDistance());

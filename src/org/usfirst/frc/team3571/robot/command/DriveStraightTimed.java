@@ -25,7 +25,7 @@ public class DriveStraightTimed extends TimedCommand {
     // Called just before this Command runs the first time
     protected void initialize() {
     	System.out.println("Executing DriveStraightTimed @ speed "+speed+" for "+
-    		    +timeout+" seconds");
+    		    +timeout+" miliseconds");
     }
 
     // Called repeatedly when this Command is scheduled to run

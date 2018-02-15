@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team3571.robot.command.Autonomous;
 import org.usfirst.frc.team3571.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team3571.robot.subsystems.ForkLift;
+import org.usfirst.frc.team3571.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team3571.robot.utilities.MPU6050;
 import org.usfirst.frc.team3571.robot.utilities.XboxController;
 import org.usfirst.frc.team3571.robot.utilities.XboxController.StickSides;
@@ -31,8 +33,10 @@ public class Robot extends IterativeRobot {
 	Command m_autonomousCommand;
 	
 	public static DriveTrain m_drivetrain;
-	public static OI m_oi;
+	public static Pneumatics m_pneumatics;
+	public static ForkLift m_forklift;
 	public static XboxController xbox;
+	public static OI m_oi;
 	
 	//public MPU6050 gyro = new MPU6050();
     //private Compressor c = new Compressor(0);
@@ -48,6 +52,8 @@ public class Robot extends IterativeRobot {
 		
 		// Initialize all subsystems
 		m_drivetrain = new DriveTrain();
+		//m_pneumatics = new Pneumatics();
+		m_forklift = new ForkLift();
 		m_oi = new OI();
 
 		// instantiate the command used for the autonomous period
@@ -56,6 +62,7 @@ public class Robot extends IterativeRobot {
 
 		// Show what command your subsystem is running on the SmartDashboard
 		SmartDashboard.putData(m_drivetrain);
+		SmartDashboard.putData(m_forklift);
 		
 	}
 
@@ -124,5 +131,6 @@ public class Robot extends IterativeRobot {
 	 */
 	private void log() {
 		m_drivetrain.log();
+		m_forklift.log();
 	}
 }
