@@ -12,6 +12,7 @@ import org.usfirst.frc.team3571.robot.RobotMap.DriverUSB;
 import org.usfirst.frc.team3571.robot.commands.Autonomous;
 import org.usfirst.frc.team3571.robot.commands.DriveStraightDistance;
 import org.usfirst.frc.team3571.robot.commands.DriveStraightTimed;
+import org.usfirst.frc.team3571.robot.commands.ShiftGears;
 import org.usfirst.frc.team3571.robot.utilities.XboxController;
 import org.usfirst.frc.team3571.robot.utilities.XboxController.Button;
 import org.usfirst.frc.team3571.robot.utilities.XboxController.CommandState;
@@ -32,7 +33,8 @@ public class OI {
 		//SmartDashboard.putData("Deliver Soda", new Autonomous());  
 
 		driver.Buttons.A.runCommand(new DriveStraightDistance(200, 0.5), CommandState.WhenPressed); 
-		driver.Buttons.B.runCommand(new ShiftGears(), CommandState.WhenPressed);
+		driver.Buttons.RightStick.runCommand(new ShiftGears(), CommandState.WhenPressed);
+		//driver.Buttons.Y.runCommand(new ShiftReverse(), CommandState.WhenPressed);
 	}
 	
 	public static void refreshAll() {

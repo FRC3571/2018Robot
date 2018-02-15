@@ -32,9 +32,14 @@ public class Pneumatics extends Subsystem {
 	}
 	
 	public void createSolenoid(int solenoidId, int id1, int id2){
-		solenoidList.add(solenoidId, new DoubleSolenoid(id1, id2));
-		solenoidList.get(solenoidId).set(DoubleSolenoid.Value.kReverse);
-		SHIFTSTATE = false;
+		try{
+			solenoidList.add(solenoidId, new DoubleSolenoid(id1, id2));
+			solenoidList.get(solenoidId).set(DoubleSolenoid.Value.kReverse);
+			SHIFTSTATE = false;
+		} catch(IndexOutOfBoundsException e){
+			System.out.println(e);
+			return;
+		}
 	}
 	
 	public void solenoidOff(int solenoidId){
