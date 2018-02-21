@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team3571.robot.commands.Autonomous;
 import org.usfirst.frc.team3571.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team3571.robot.subsystems.Intake;
 import org.usfirst.frc.team3571.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team3571.robot.utilities.MPU6050;
 import org.usfirst.frc.team3571.robot.utilities.XboxController;
@@ -34,8 +35,11 @@ public class Robot extends IterativeRobot {
 	
 	public static DriveTrain m_drivetrain;
 	public static Pneumatics m_pneumatics;
+	public static Intake m_intake;
+	public static XboxController driverXbox;
+	public static XboxController operatorXbox;
 	public static OI m_oi;
-	public static XboxController xbox;
+	
 	//public MPU6050 gyro = new MPU6050();
     //private Compressor c = new Compressor(0);
 	//private Encoder enc = new Encoder(0,1,true,EncodingType.k1X);
@@ -46,16 +50,17 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		
-		
+			
 		// Initialize all subsystems
 		m_drivetrain = new DriveTrain();
 		m_pneumatics = new Pneumatics();
+		m_intake = new Intake();
 		m_oi = new OI();
 
 		// instantiate the command used for the autonomous period
 		m_autonomousCommand = new Autonomous();
-		xbox = m_oi.getXboxControl();
+		driverXbox = m_oi.getDriverXboxControl();
+		operatorXbox = m_oi.getOperatorXboxControl();
 
 		// Show what command your subsystem is running on the SmartDashboard
 		SmartDashboard.putData(m_drivetrain);
@@ -102,33 +107,7 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic(){
 		//Testing xbox buttons, joysticks and triggers
 		OI.refreshAll();
-		//System.out.println("Left Y = " + xbox.LeftStick.Y);
-		//System.out.println("Right Y = " + xbox.RightStick.Y);
-		//System.out.println("Left X = " + xbox.LeftStick.X);
-		//System.out.println("Right X = " + xbox.RightStick.X);
-		if(xbox.Buttons.A.changedDown){
-			System.out.println("Button A = " + xbox.Buttons.A.changedDown);
-		} else if(xbox.Buttons.B.changedUp){
-			System.out.println("Button B = " + xbox.Buttons.B.changedDown);
-		}
-		
-		
-		final double countsPerRevolution = 2048.0;
-		final double encoder_angular_distance_per_pulse = 2.0*Math.PI / countsPerRevolution;
-		final double wheel_radius = 63.5; //mm;
-		final double encLinearDistancePerPulse = wheel_radius * encoder_angular_distance_per_pulse; 
-		
-		//enc.setDistancePerPulse(encLinearDistancePerPulse);
-		
-		
-		
-		//System.out.println(gyro.getAngle(MPU6050.Axis.X));
-
-	    //PNEUMATICS
-	    //c.setClosedLoopControl(true);
-	    //c.setClosedLoopControl(false);
 	}
-	
 
 	/**
 	 * The log method puts interesting information to the SmartDashboard.

@@ -9,13 +9,16 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
  */
 public class RobotMap {
 	
+	
 	public static class PWM {
 		public static final int FRONT_LEFT_DRIVE_MOTOR = 0;
 		public static final int MIDDLE_LEFT_DRIVE_MOTOR = 2;
 		public static final int REAR_LEFT_DRIVE_MOTOR = 1;
 		public static final int FRONT_RIGHT_DRIVE_MOTOR = 4;
-		public static final int MIDDLE_RIGHT_DRIVE_MOTOR = 3;
-		public static final int REAR_RIGHT_DRIVE_MOTOR = 5;
+		public static final int MIDDLE_RIGHT_DRIVE_MOTOR = 7;
+		public static final int REAR_RIGHT_DRIVE_MOTOR = 8;
+		public static final int RIGHT_INTAKE_MOTOR = 3;
+		public static final int LEFT_INTAKE_MOTOR = 5;
 		public static final boolean MOTOR_INVERTED = true;
 		public static final boolean MOTOR_NOT_INVERTED = false;
 		

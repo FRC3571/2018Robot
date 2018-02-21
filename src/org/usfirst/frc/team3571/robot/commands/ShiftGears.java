@@ -18,6 +18,11 @@ public class ShiftGears extends Command {
 	// Called just before this Command runs the first time
     @Override
     public void initialize(){
+    	
+    }
+    
+    @Override
+	public void start(){
     	if(!Robot.m_pneumatics.getShiftState()){
     		Robot.m_pneumatics.solenoidForward(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID);
     	} else if(Robot.m_pneumatics.getShiftState()){

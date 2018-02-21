@@ -14,7 +14,6 @@ import org.usfirst.frc.team3571.robot.commands.DriveStraightDistance;
 import org.usfirst.frc.team3571.robot.commands.DriveStraightTimed;
 import org.usfirst.frc.team3571.robot.commands.ShiftGears;
 import org.usfirst.frc.team3571.robot.utilities.XboxController;
-import org.usfirst.frc.team3571.robot.utilities.XboxController.Button;
 import org.usfirst.frc.team3571.robot.utilities.XboxController.CommandState;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,22 +25,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class OI {
 	
 	public static final XboxController driver = new XboxController(DriverUSB.DRIVER_CONTROLLER, DEFAULT.CONTROLLER_DEADZONE);
-	
+	public static final XboxController operator = new XboxController(DriverUSB.OPERATOR_CONTROLLER, DEFAULT.CONTROLLER_DEADZONE);
 	
 	public OI() {
 		// Put Some buttons on the SmartDashboard
-		//SmartDashboard.putData("Deliver Soda", new Autonomous());  
-
+		//SmartDashboard.putData("Deliver Box", new Autonomous());  
 		driver.Buttons.A.runCommand(new DriveStraightDistance(200, 0.5), CommandState.WhenPressed); 
 		driver.Buttons.RightStick.runCommand(new ShiftGears(), CommandState.WhenPressed);
-		//driver.Buttons.Y.runCommand(new ShiftReverse(), CommandState.WhenPressed);
 	}
 	
 	public static void refreshAll() {
 		driver.refresh();
+		operator.refresh();
 	}
 	
-	public XboxController getXboxControl() {
+	//return the driver's  xbox controller
+	public XboxController getDriverXboxControl() {
 		return driver;
+	}
+	
+	//return the operator's xbox controller
+	public XboxController getOperatorXboxControl() {
+		return operator;
 	}
 }
