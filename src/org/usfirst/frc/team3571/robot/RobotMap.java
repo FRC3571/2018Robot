@@ -13,6 +13,8 @@ public class RobotMap {
 		public static final int REAR_RIGHT_DRIVE_MOTOR = 6; //this is 5
 		public static final int FL_LIFT_MOTOR = 5; //change with 6 on real bot
 		public static final int FL_TILT_MOTOR = 7;
+		public static final int RIGHT_INTAKE_MOTOR = 3;
+		public static final int LEFT_INTAKE_MOTOR = 5;
 		public static final boolean MOTOR_INVERTED = true;
 		public static final boolean MOTOR_NOT_INVERTED = false;
 		
@@ -59,7 +61,7 @@ public class RobotMap {
 
 	 */
 
-	public static class PNEUMATICS{
+	public static class PNEUMATICS {
 
 		public static final int PUMP_ID = 0;
 

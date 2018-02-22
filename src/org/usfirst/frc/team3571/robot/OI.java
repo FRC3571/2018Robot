@@ -26,6 +26,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class OI {
 	
 	public static final XboxController driver = new XboxController(DriverUSB.DRIVER_CONTROLLER, DEFAULT.CONTROLLER_DEADZONE);
+	public static final XboxController operator = new XboxController(DriverUSB.OPERATOR_CONTROLLER, DEFAULT.CONTROLLER_DEADZONE);
+	
 	
 	
 	public OI() {
@@ -38,9 +40,14 @@ public class OI {
 	
 	public static void refreshAll() {
 		driver.refresh();
+		operator.refresh();
 	}
 	
-	public XboxController getXboxControl() {
+	public XboxController getDriverXboxControl() {
 		return driver;
+	}
+	
+	public XboxController getOperatorXboxControl() {
+		return operator;
 	}
 }
