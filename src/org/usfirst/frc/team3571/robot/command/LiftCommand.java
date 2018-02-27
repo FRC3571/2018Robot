@@ -17,7 +17,7 @@ public class LiftCommand extends Command {
 		requires(Robot.m_forklift);
 		targetDistance = RobotMap.ENCODER.SCALE_HEIGHT;
 		this.direction = direction;
-		this.currState = ForkLift.State.BOTTOM;
+		this.currState = ForkLift.State.LIFT_BOTTOM;
 	}
 	
 	@Override
@@ -39,10 +39,10 @@ public class LiftCommand extends Command {
 	
 	@Override
 	public void initialize() {
-		this.currState = Robot.m_forklift.getState();
+		this.currState = Robot.m_forklift.getLiftState();
 		//make sure state is not in max zones
-		if((direction==RobotMap.LIFT.UP && currState == ForkLift.State.TOP) ||
-				(direction==RobotMap.LIFT.DOWN && currState == ForkLift.State.BOTTOM)) {
+		if((direction==RobotMap.LIFT.UP && currState == ForkLift.State.LIFT_TOP) ||
+				(direction==RobotMap.LIFT.DOWN && currState == ForkLift.State.LIFT_BOTTOM)) {
 			System.out.println("Move the opposite direction!");
 		}
 		else {

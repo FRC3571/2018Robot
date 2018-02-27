@@ -7,13 +7,13 @@ public class RobotMap {
 	public static class PWM {
 		public static final int FRONT_LEFT_DRIVE_MOTOR = 0;
 		public static final int MIDDLE_LEFT_DRIVE_MOTOR = 1;
-		public static final int REAR_LEFT_DRIVE_MOTOR = 2;
-		public static final int FRONT_RIGHT_DRIVE_MOTOR = 3;
+		public static final int REAR_LEFT_DRIVE_MOTOR = 8;
+		public static final int FRONT_RIGHT_DRIVE_MOTOR = 9;
 		public static final int MIDDLE_RIGHT_DRIVE_MOTOR = 4;
 		public static final int REAR_RIGHT_DRIVE_MOTOR = 6; //this is 5
-		public static final int FL_LIFT_MOTOR = 5; //change with 6 on real bot
+		public static final int FL_LIFT_MOTOR = 3; //change with 6 on real bot
 		public static final int FL_TILT_MOTOR = 7;
-		public static final int RIGHT_INTAKE_MOTOR = 3;
+		public static final int RIGHT_INTAKE_MOTOR = 2;
 		public static final int LEFT_INTAKE_MOTOR = 5;
 		public static final boolean MOTOR_INVERTED = true;
 		public static final boolean MOTOR_NOT_INVERTED = false;
@@ -51,6 +51,16 @@ public class RobotMap {
 	public static class LIFT {
 		public static final boolean UP = true;
 		public static final boolean DOWN = false;
+		
+		public static class TILT {
+			public static final double SPEED = 0.4;
+			public static final int UP = 1;
+			public static final int MIDDLE = 2;
+			public static final int DOWN = 3;
+			public static final int TOP_LIMIT_SWITCH = 8;
+			public static final int MIDDLE_LIMIT_SWITCH = 9;
+			public static final int BOTTOM_LIMIT_SWITCH = 10;
+		}
 	}
 	
 	/*

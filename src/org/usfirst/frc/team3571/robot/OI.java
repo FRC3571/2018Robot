@@ -13,6 +13,7 @@ import org.usfirst.frc.team3571.robot.command.Autonomous;
 import org.usfirst.frc.team3571.robot.command.DriveStraightDistance;
 import org.usfirst.frc.team3571.robot.command.DriveStraightTimed;
 import org.usfirst.frc.team3571.robot.command.LiftCommand;
+import org.usfirst.frc.team3571.robot.command.TiltCommand;
 import org.usfirst.frc.team3571.robot.utilities.XboxController;
 import org.usfirst.frc.team3571.robot.utilities.XboxController.Button;
 import org.usfirst.frc.team3571.robot.utilities.XboxController.CommandState;
@@ -33,8 +34,11 @@ public class OI {
 	public OI() {
 		// Put Some buttons on the SmartDashboard
 		//SmartDashboard.putData("Deliver Soda", new Autonomous());  
-		driver.Buttons.RB.runCommand(new LiftCommand(RobotMap.LIFT.DOWN), CommandState.WhenPressed);
-		driver.Buttons.LB.runCommand(new LiftCommand(RobotMap.LIFT.UP), CommandState.WhenPressed); 
+		operator.Buttons.RB.runCommand(new LiftCommand(RobotMap.LIFT.DOWN), CommandState.WhenPressed);
+		operator.Buttons.LB.runCommand(new LiftCommand(RobotMap.LIFT.UP), CommandState.WhenPressed); 
+		operator.Buttons.A.runCommand(new TiltCommand(RobotMap.LIFT.TILT.UP), CommandState.WhenPressed);
+		operator.Buttons.B.runCommand(new TiltCommand(RobotMap.LIFT.TILT.MIDDLE), CommandState.WhenPressed);
+		operator.Buttons.X.runCommand(new TiltCommand(RobotMap.LIFT.TILT.DOWN), CommandState.WhenPressed);
 		
 	}
 	
