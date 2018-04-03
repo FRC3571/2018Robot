@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3571.robot.command;
 
+import org.usfirst.frc.team3571.robot.RobotMap;
 import org.usfirst.frc.team3571.robot.path.PathCommand;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -20,6 +21,8 @@ public class ShortRun extends CommandGroup {
 		addSequential(new DriveStraightDistance(4550));
 		addSequential(new TurnWithDegrees(turn));
 		addSequential(new DriveStraightDistance(500));
+		addSequential(new TiltCommand(RobotMap.LIFT.DOWN));
+		addSequential(new IntakeOut(false));
 	}
 	
 	@Override

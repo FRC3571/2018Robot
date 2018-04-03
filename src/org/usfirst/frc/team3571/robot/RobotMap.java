@@ -6,11 +6,11 @@ public class RobotMap {
 	
 	public static class PWM {
 		public static final int FRONT_LEFT_DRIVE_MOTOR = 0;
-		//public static final int MIDDLE_LEFT_DRIVE_MOTOR = 1;
-		public static final int REAR_LEFT_DRIVE_MOTOR = 1;
+		public static final int MIDDLE_LEFT_DRIVE_MOTOR = 1;
+		//public static final int REAR_LEFT_DRIVE_MOTOR = 1;
 		public static final int FRONT_RIGHT_DRIVE_MOTOR = 2;
-		//public static final int MIDDLE_RIGHT_DRIVE_MOTOR = 4;
-		public static final int REAR_RIGHT_DRIVE_MOTOR = 3; 
+		public static final int MIDDLE_RIGHT_DRIVE_MOTOR = 3;
+		//public static final int REAR_RIGHT_DRIVE_MOTOR = 3; 
 		
 		public static final int RIGHT_INTAKE_MOTOR = 6;
 		public static final int LEFT_INTAKE_MOTOR = 5;
@@ -32,6 +32,13 @@ public class RobotMap {
 		public static final int OPERATOR_CONTROLLER = 1;
 	}
 	
+	public static class INTAKE {
+		//time (in seconds) for intake to suck in/suck out during autonomous
+		public static final int AUTO_TIME = 3;
+		//intake motor speed during auto
+		public static final double SPEED = 0.95;
+	}
+	
 	public static class ENCODER {
 		public static final int FRONT_LEFT_ENCODER_CHANNEL_A = 0; //temp, uses 0 and 1
 		public static final int FRONT_LEFT_ENCODER_CHANNEL_B = 1;
@@ -40,6 +47,10 @@ public class RobotMap {
 		//distance encoders for forklift
 		public static final int FL_DISTANCE_ENCODER_CHANNEL_A = 4;
 		public static final int FL_DISTANCE_ENCODER_CHANNEL_B = 5;
+		//tilt distance encoder
+		public static final int TILT_DISTANCE_ENCODER_CHANNEL_A = 0;
+		public static final int TILT_DISTANCE_ENCODER_CHANNEL_B = 0;
+		
 		public static final boolean REVERSE_DIRECTION = true;
 		public static final boolean FORWARD_DIRECTION = false;
 		public static final EncodingType ENCODER_TYPE = EncodingType.k1X;
@@ -47,6 +58,7 @@ public class RobotMap {
 		public static final double WHEEL_RADIUS = 62.5; //in millimeters
 		public static final double FL_RADIUS = 3;
 		public static final double SCALE_HEIGHT = 1000;
+		public static final double TILT_DISTANCE = 100;
 		public static final double SWITCH_HEIGHT = 2000;
 		public static final double GEAR_RATIO_LOW = 6.05;//4.429;
 		public static final double GEAR_RATIO_HIGH = 2.083;
@@ -56,9 +68,12 @@ public class RobotMap {
 	public static class LIFT {
 		public static final boolean UP = true;
 		public static final boolean DOWN = false;
+		//used for timed lift, time for moving
+		public static final int TIME = 2;
 		
 		public static class TILT {
 			public static final double SPEED = 0.4;
+			public static final int TIME = 1;
 			
 			
 			

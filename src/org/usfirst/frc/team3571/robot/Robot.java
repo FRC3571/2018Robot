@@ -81,15 +81,15 @@ public class Robot extends IterativeRobot {
 		driverStation = DriverStation.getInstance();
 		// Initialize all subsystems
 		m_drivetrain = new DriveTrain();
-		m_pneumatics = new Pneumatics();
+		//m_pneumatics = new Pneumatics();
 		
-		m_pneumatics.createSolenoid(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID, 
+		/*m_pneumatics.createSolenoid(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID, 
 
 				RobotMap.PNEUMATICS.SOLENOID_ID_1, 
 
 				RobotMap.PNEUMATICS.SOLENOID_ID_2);
 		
-		m_pneumatics.createSolenoid(RobotMap.PNEUMATICS.FORKLIFT_SOLENOID, RobotMap.PNEUMATICS.SOLENOID_ID_3, RobotMap.PNEUMATICS.SOLENOID_ID_4);
+		m_pneumatics.createSolenoid(RobotMap.PNEUMATICS.FORKLIFT_SOLENOID, RobotMap.PNEUMATICS.SOLENOID_ID_3, RobotMap.PNEUMATICS.SOLENOID_ID_4);*/
 		
 		m_forklift = new ForkLift();
 		m_intake = new Intake();
@@ -113,8 +113,6 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		
-		
 		
 		Command autoCommand = chooser.getSelected();
 		if(autoCommand instanceof PathCommand) {

@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class TiltCommand extends Command {
 	
-	private int direction;
+	private boolean direction;
 	
-	public TiltCommand(int direction) {
+	public TiltCommand(boolean direction) {
 		requires(Robot.m_forklift);
 		this.direction = direction;
 	}
@@ -19,52 +19,39 @@ public class TiltCommand extends Command {
 	@Override
 	protected void initialize() {
 		Spark tilt = Robot.m_forklift.getTilt();
-		final double speed = RobotMap.LIFT.TILT.SPEED;
-		if(direction==RobotMap.LIFT.TILT.UP) {
-			Robot.m_forklift.getTilt().setSpeed(0.4);
+		double speed = RobotMap.LIFT.TILT.SPEED;
+		
+		ForkLift.State currState = Robot.m_forklift.getLiftState();
+		//make sure state is not in max zones
+		if((direction==RobotMap.LIFT.UP && currState == ForkLift.State.TILT_TOP) ||
+				(direction==RobotMap.LIFT.DOWN && currState == ForkLift.State.TILT_BOTTOM)) {
+			System.out.println("Move the opposite direction!");
 		}
-		else if(direction==RobotMap.LIFT.TILT.MIDDLE) {
-			ForkLift.State currState = Robot.m_forklift.getTiltState();
-			switch (currState) {
-				case TILT_BOTTOM:
-					tilt.setSpeed(speed);
-					break;
-				case TILT_TOP:
-					tilt.setSpeed(-speed);
-				default:
-					break;
-			}
-		}
+		
 		else {
-			Robot.m_forklift.getTilt().setSpeed(-0.4);
+			//setup speed
+			if(direction==RobotMap.LIFT.DOWN) {
+				speed = -speed;
+			}
+			Robot.m_forklift.getTilt().setSpeed(speed);
+		}
+	}
+	
+	@Override
+	protected void execute() {
+		double currDistance = Math.abs(Robot.m_forklift.getTiltEncoder().getDistance());
+		if(currDistance>=RobotMap.ENCODER.TILT_DISTANCE) {
+			System.out.println("hit!");
+			Robot.m_forklift.updateTiltDirection(direction);
+			Robot.m_forklift.getTilt().setSpeed(0);
+			Robot.m_forklift.getTiltEncoder().reset();
 		}
 	}
 
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		switch(direction) {
-			case RobotMap.LIFT.TILT.UP:
-				if(Robot.m_forklift.isTopHit()) {
-					Robot.m_forklift.setTiltState(ForkLift.State.TILT_TOP);
-					return true;
-				}
-				break;
-			case RobotMap.LIFT.TILT.MIDDLE:
-				if(Robot.m_forklift.isMiddleHit()) {
-					Robot.m_forklift.setTiltState(ForkLift.State.TILT_MIDDLE);
-					return true;
-				}
-				break;
-			case RobotMap.LIFT.TILT.DOWN:
-				if(Robot.m_forklift.isBottomHit()) {
-					Robot.m_forklift.setTiltState(ForkLift.State.TILT_BOTTOM);
-					return true;
-				}
-				break;
-			
-		}
-		return false;
+		return Robot.m_forklift.getTilt().getSpeed()==0;
 	}
 	
 	@Override 

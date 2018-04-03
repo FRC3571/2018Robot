@@ -35,14 +35,14 @@ public class DriveTrain extends Subsystem implements Loggable {
 	//Six motor drivetrain:	 
 	
 	private Spark m_frontLeft = new Spark(RobotMap.PWM.FRONT_LEFT_DRIVE_MOTOR);
-	//private Spark m_midLeft = new Spark(RobotMap.PWM.MIDDLE_LEFT_DRIVE_MOTOR);
-	private Spark m_rearLeft = new Spark(RobotMap.PWM.REAR_LEFT_DRIVE_MOTOR);
-	private SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_rearLeft);
+	private Spark m_midLeft = new Spark(RobotMap.PWM.MIDDLE_LEFT_DRIVE_MOTOR);
+	//private Spark m_rearLeft = new Spark(RobotMap.PWM.REAR_LEFT_DRIVE_MOTOR);
+	private SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_midLeft);
 
 	private Spark m_frontRight = new Spark(RobotMap.PWM.FRONT_RIGHT_DRIVE_MOTOR);
-//	private Spark m_midRight = new Spark(RobotMap.PWM.MIDDLE_RIGHT_DRIVE_MOTOR);
-	private Spark m_rearRight = new Spark(RobotMap.PWM.REAR_RIGHT_DRIVE_MOTOR);
-	private SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_rearRight);
+	private Spark m_midRight = new Spark(RobotMap.PWM.MIDDLE_RIGHT_DRIVE_MOTOR);
+	//private Spark m_rearRight = new Spark(RobotMap.PWM.REAR_RIGHT_DRIVE_MOTOR);
+	private SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_midRight);
 
 	private DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
 	
@@ -64,8 +64,8 @@ public class DriveTrain extends Subsystem implements Loggable {
 		super();
 
 		//Middle motor may need to travel in opposite direction to others based on gearbox design
-		//m_midLeft.setInverted(RobotMap.PWM.MOTOR_INVERTED);
-		//m_midRight.setInverted(RobotMap.PWM.MOTOR_INVERTED);
+		m_midLeft.setInverted(RobotMap.PWM.MOTOR_INVERTED);
+		m_midRight.setInverted(RobotMap.PWM.MOTOR_INVERTED);
 		
 		final double encoderLinearDistancePerPulse = RobotMath.getDistancePerPulse(RobotMap.ENCODER.COUNTS_PER_REVOLUTION, 
 				RobotMap.ENCODER.WHEEL_RADIUS);

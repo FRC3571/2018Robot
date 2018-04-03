@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class OI {
 	
 	public static final XboxController driver = new XboxController(DriverUSB.DRIVER_CONTROLLER, DEFAULT.CONTROLLER_DEADZONE);
+	public static final XboxController operator = new XboxController(DriverUSB.OPERATOR_CONTROLLER, DEFAULT.CONTROLLER_DEADZONE);
 	
 	
 	
@@ -41,13 +42,13 @@ public class OI {
 		//driver.Buttons.RB.runCommand(new LiftCommand(RobotMap.LIFT.DOWN), CommandState.WhenPressed);
 		//driver.Buttons.LB.runCommand(new LiftCommand(RobotMap.LIFT.UP), CommandState.WhenPressed); 
 		//a forward, b reverse
-		driver.Buttons.Y.runCommand(new TiltManualCommand(true), CommandState.WhilePressed);
-		driver.Buttons.X.runCommand(new TiltManualCommand(false), CommandState.WhilePressed);
-		driver.Buttons.RB.runCommand(new LiftManualCommand(true), CommandState.WhilePressed);
-		driver.Buttons.LB.runCommand(new LiftManualCommand(false), CommandState.WhilePressed);
-		driver.Buttons.RightStick.runCommand(new ShiftGears(), CommandState.WhenPressed);
-		driver.Buttons.A.runCommand(new OpenCloseCommand(true), CommandState.WhenPressed);
-		driver.Buttons.B.runCommand(new OpenCloseCommand(false), CommandState.WhenPressed);
+		operator.Buttons.Y.runCommand(new TiltManualCommand(true), CommandState.WhilePressed);
+		operator.Buttons.X.runCommand(new TiltManualCommand(false), CommandState.WhilePressed);
+		operator.Buttons.RB.runCommand(new LiftManualCommand(true), CommandState.WhilePressed);
+		operator.Buttons.LB.runCommand(new LiftManualCommand(false), CommandState.WhilePressed);
+		//driver.Buttons.RightStick.runCommand(new ShiftGears(), CommandState.WhenPressed);
+		//driver.Buttons.A.runCommand(new OpenCloseCommand(true), CommandState.WhenPressed);
+		//driver.Buttons.B.runCommand(new OpenCloseCommand(false), CommandState.WhenPressed);
 		
 	}
 	
@@ -57,6 +58,10 @@ public class OI {
 	
 	public XboxController getDriverXboxControl() {
 		return driver;
+	}
+	
+	public XboxController getOperatorXboxController() {
+		return operator;
 	}
 
 }

@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3571.robot.command;
 
+import org.usfirst.frc.team3571.robot.RobotMap;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class CenterRun extends CommandGroup {
@@ -26,6 +28,8 @@ public class CenterRun extends CommandGroup {
 		addSequential(new DriveStraightDistance(1000));
 		addSequential(new TurnWithDegrees(-turn));
 		addSequential(new DriveStraightDistance(2350));
+		addSequential(new TiltCommand(RobotMap.LIFT.DOWN));
+		addSequential(new IntakeOut(false));
 	}
 	
 	@Override 

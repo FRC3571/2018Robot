@@ -19,24 +19,27 @@ public class ForkLift extends Subsystem implements Loggable  {
 	private LiftGroup liftMotor = new LiftGroup(firstLiftMotor, secondLiftMotor);
 	//tilt
 	private Spark tiltMotor = new Spark(RobotMap.PWM.FL_TILT_MOTOR);
-	private DigitalInput topLimitSwitch = new DigitalInput(RobotMap.LIFT.TILT.TOP_LIMIT_SWITCH);
-	private DigitalInput bottomLimitSwitch = new DigitalInput(RobotMap.LIFT.TILT.BOTTOM_LIMIT_SWITCH);
-	private DigitalInput middleLimitSwitch = new DigitalInput(RobotMap.LIFT.TILT.MIDDLE_LIMIT_SWITCH);
 	//encoder
 	private Encoder distanceEncoder = new Encoder(RobotMap.ENCODER.FL_DISTANCE_ENCODER_CHANNEL_A,
 															RobotMap.ENCODER.FL_DISTANCE_ENCODER_CHANNEL_B,
 															RobotMap.ENCODER.REVERSE_DIRECTION,
 															 RobotMap.ENCODER.ENCODER_TYPE);
+	
+	private Encoder tiltEncoder = new Encoder(RobotMap.ENCODER.TILT_DISTANCE_ENCODER_CHANNEL_A,
+			RobotMap.ENCODER.TILT_DISTANCE_ENCODER_CHANNEL_B, RobotMap.ENCODER.REVERSE_DIRECTION, RobotMap.ENCODER.ENCODER_TYPE);
+	
 	private State liftState;
 	private State tiltState;
 	private boolean direction; 
+	private boolean tiltDirection;
 	
 	public ForkLift() {
 		super();
 		//current state
 		this.liftState = State.LIFT_BOTTOM;
-		this.tiltState = State.TILT_MIDDLE;
+		this.tiltState = State.TILT_TOP;
 		this.direction = RobotMap.LIFT.UP;
+		this.tiltDirection = RobotMap.LIFT.UP;
 		//set the distance per pulse to whatevers defaulted in the robotmap
 		distanceEncoder.setDistancePerPulse(RobotMath.getDistancePerPulse(RobotMap.ENCODER.COUNTS_PER_REVOLUTION, 
 				RobotMap.ENCODER.FL_RADIUS));
@@ -64,6 +67,11 @@ public class ForkLift extends Subsystem implements Loggable  {
 		changeState();
 	}
 	
+	public void updateTiltDirection(boolean direction) {
+		this.tiltDirection = direction;
+		changeTiltState();
+	}
+	
 	public LiftGroup getLift() {
 		return liftMotor;
 	}
@@ -72,20 +80,12 @@ public class ForkLift extends Subsystem implements Loggable  {
 		return tiltMotor;
 	}
 	
-	public boolean isTopHit() {
-		return !topLimitSwitch.get();
-	}
-	
-	public boolean isBottomHit() {
-		return !bottomLimitSwitch.get();
-	}
-	
-	public boolean isMiddleHit() {
-		return !middleLimitSwitch.get();
-	}
-	
 	public Encoder getDistanceEncoder() {
 		return distanceEncoder;
+	}
+	
+	public Encoder getTiltEncoder() {
+		return tiltEncoder;
 	}
 	
 	public State getLiftState() {
@@ -94,10 +94,6 @@ public class ForkLift extends Subsystem implements Loggable  {
 	
 	public State getTiltState() {
 		return tiltState;
-	}
-	
-	public void setTiltState(State tiltState) {
-		this.tiltState = tiltState;
 	}
 	
 	private void changeState() {
@@ -109,13 +105,26 @@ public class ForkLift extends Subsystem implements Loggable  {
 		}
 	}
 	
+	private void changeTiltState() {
+		if(direction==RobotMap.LIFT.UP) {
+			tiltState = ForkLift.State.values()[tiltState.ordinal()+1];
+		}
+		else {
+			tiltState = ForkLift.State.values()[tiltState.ordinal()-1];
+		}
+	}
+	
 	public enum State {
+		//lift range
 		LIFT_BOTTOM,
 		LIFT_MIDDLE,
 		LIFT_TOP,
+		//lift range (*end*)
+		//tilt range
 		TILT_BOTTOM,
 		TILT_MIDDLE,
 		TILT_TOP;
+		//tilt range (*end*)
 	}
 	
 
