@@ -15,6 +15,7 @@ import org.usfirst.frc.team3571.robot.utilities.XboxController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
+import org.usfirst.frc.team3571.robot.Robot;
 //import org.usfirst.frc.team3571.robot.Robot;
 import org.usfirst.frc.team3571.robot.RobotMap;
 import org.usfirst.frc.team3571.robot.command.TankDriveWithXboxControl;
@@ -34,14 +35,14 @@ public class DriveTrain extends Subsystem implements Loggable {
 	//Six motor drivetrain:	 
 	
 	private Spark m_frontLeft = new Spark(RobotMap.PWM.FRONT_LEFT_DRIVE_MOTOR);
-	private Spark m_midLeft = new Spark(RobotMap.PWM.MIDDLE_LEFT_DRIVE_MOTOR);
+	//private Spark m_midLeft = new Spark(RobotMap.PWM.MIDDLE_LEFT_DRIVE_MOTOR);
 	private Spark m_rearLeft = new Spark(RobotMap.PWM.REAR_LEFT_DRIVE_MOTOR);
-	private SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_midLeft, m_rearLeft);
+	private SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_rearLeft);
 
 	private Spark m_frontRight = new Spark(RobotMap.PWM.FRONT_RIGHT_DRIVE_MOTOR);
-	private Spark m_midRight = new Spark(RobotMap.PWM.MIDDLE_RIGHT_DRIVE_MOTOR);
+//	private Spark m_midRight = new Spark(RobotMap.PWM.MIDDLE_RIGHT_DRIVE_MOTOR);
 	private Spark m_rearRight = new Spark(RobotMap.PWM.REAR_RIGHT_DRIVE_MOTOR);
-	private SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_midRight, m_rearRight);
+	private SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_rearRight);
 
 	private DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
 	
@@ -63,33 +64,15 @@ public class DriveTrain extends Subsystem implements Loggable {
 		super();
 
 		//Middle motor may need to travel in opposite direction to others based on gearbox design
-		m_midLeft.setInverted(RobotMap.PWM.MOTOR_INVERTED);
-		m_midRight.setInverted(RobotMap.PWM.MOTOR_INVERTED);
+		//m_midLeft.setInverted(RobotMap.PWM.MOTOR_INVERTED);
+		//m_midRight.setInverted(RobotMap.PWM.MOTOR_INVERTED);
 		
-//		final double countsPerRevolution = RobotMap.ENCODER.COUNTS_PER_REVOLUTION;
-//		final double wheel_radius = RobotMap.ENCODER.WHEEL_RADIUS;
-//		final double encoder_angular_distance_per_pulse = 2.0*Math.PI/countsPerRevolution;
 		final double encoderLinearDistancePerPulse = RobotMath.getDistancePerPulse(RobotMap.ENCODER.COUNTS_PER_REVOLUTION, 
 				RobotMap.ENCODER.WHEEL_RADIUS);
 		
 		leftEncoder.setDistancePerPulse(encoderLinearDistancePerPulse);
 		rightEncoder.setDistancePerPulse(encoderLinearDistancePerPulse);
 		
-		// Encoders may measure differently in the real world and in
-		// simulation. In this example the robot moves 0.042 barleycorns
-		// per tick in the real world, but the simulated encoders
-		// simulate 360 tick encoders. This if statement allows for the
-		// real robot to handle this difference in devices.
-		/*
-		if (Robot.isReal()) {
-			leftEncoder.setDistancePerPulse(0.042);
-			rightEncoder.setDistancePerPulse(0.042);
-		} else {
-			// Circumference in ft = 4in/12(in/ft)*PI
-			leftEncoder.setDistancePerPulse((4.0 / 12.0 * Math.PI) / 360.0);
-			rightEncoder.setDistancePerPulse((4.0 / 12.0 * Math.PI) / 360.0);
-		}
-		*/
 		
 		// Let's name the sensors on the LiveWindow
 		addChild("Drive", m_drive);
@@ -97,6 +80,9 @@ public class DriveTrain extends Subsystem implements Loggable {
 		addChild("Right Encoder", rightEncoder);
 		//addChild("Rangefinder", m_rangefinder);
 		addChild("Gyro", m_gyro);
+		
+		drive(0, 0);
+		m_drive.setSafetyEnabled(false);
 	}
 
 	/**
@@ -129,7 +115,10 @@ public class DriveTrain extends Subsystem implements Loggable {
 	 *            Speed in range [-1,1]
 	 */
 	public void drive(double left, double right) {
-		m_drive.tankDrive(left, right);
+		double leftOffset = SmartDashboard.getNumber("leftOff", RobotMap.PWM.LEFT_MOTOR_OFFSET);
+		double rightOffset = SmartDashboard.getNumber("rightOff", RobotMap.PWM.RIGHT_MOTOR_OFFSET);
+		
+		m_drive.tankDrive(left*leftOffset, right*rightOffset);
 	}
 
 	/**
@@ -166,7 +155,11 @@ public class DriveTrain extends Subsystem implements Loggable {
 	 * @return The distance driven (average of left and right encoders).
 	 */
 	public double getDistance() {
-		return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2;
+		return (leftEncoder.getDistance() + rightEncoder.getDistance())/2;
+	}
+	
+	public double getTurnDistance() {
+		return (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance()))/2;
 	}
 
 	/**

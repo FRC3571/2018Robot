@@ -8,12 +8,22 @@
 package org.usfirst.frc.team3571.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team3571.robot.command.Autonomous;
+import org.usfirst.frc.team3571.robot.command.CenterRun;
+import org.usfirst.frc.team3571.robot.command.DriveStraightDistance;
+import org.usfirst.frc.team3571.robot.command.DriveStraightTimed;
+import org.usfirst.frc.team3571.robot.command.LongRun;
+import org.usfirst.frc.team3571.robot.command.ShortRun;
+import org.usfirst.frc.team3571.robot.path.PathCommand;
 import org.usfirst.frc.team3571.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3571.robot.subsystems.ForkLift;
 import org.usfirst.frc.team3571.robot.subsystems.Intake;
@@ -31,7 +41,7 @@ import org.usfirst.frc.team3571.robot.utilities.XboxController.StickSides;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	Command m_autonomousCommand;
+	Autonomous m_autonomousCommand;
 	
 	public static DriveTrain m_drivetrain;
 	public static Pneumatics m_pneumatics;
@@ -40,10 +50,22 @@ public class Robot extends IterativeRobot {
 	public static XboxController driverXbox;
 	public static XboxController operatorXbox;
 	public static OI m_oi;
+
 	
 	//public MPU6050 gyro = new MPU6050();
     //private Compressor c = new Compressor(0);
 	//private Encoder enc = new Encoder(0,1);
+	private DigitalInput di = new DigitalInput(9);
+	
+	//for game input
+	private DriverStation driverStation; 
+	
+	//chooser
+	private SendableChooser<Command> chooser;
+	
+	//signal recieved
+	private boolean signalRecieved;
+	
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -52,10 +74,23 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		
+		/**
+		 * 7780 long run
+		 */
 		
+		driverStation = DriverStation.getInstance();
 		// Initialize all subsystems
 		m_drivetrain = new DriveTrain();
-		//m_pneumatics = new Pneumatics();
+		m_pneumatics = new Pneumatics();
+		
+		m_pneumatics.createSolenoid(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID, 
+
+				RobotMap.PNEUMATICS.SOLENOID_ID_1, 
+
+				RobotMap.PNEUMATICS.SOLENOID_ID_2);
+		
+		m_pneumatics.createSolenoid(RobotMap.PNEUMATICS.FORKLIFT_SOLENOID, RobotMap.PNEUMATICS.SOLENOID_ID_3, RobotMap.PNEUMATICS.SOLENOID_ID_4);
+		
 		m_forklift = new ForkLift();
 		m_intake = new Intake();
 		m_oi = new OI();
@@ -63,7 +98,12 @@ public class Robot extends IterativeRobot {
 		// instantiate the command used for the autonomous period
 		m_autonomousCommand = new Autonomous();
 		driverXbox = m_oi.getDriverXboxControl();
-		operatorXbox = m_oi.getOperatorXboxControl();
+		operatorXbox = m_oi.getDriverXboxControl();
+		setupAutoCommands();
+		
+		//chooser.addDefault("Left Long",new LeftLong());
+		
+		//SmartDashboard.putData("Auto",chooser);
 
 		// Show what command your subsystem is running on the SmartDashboard
 		SmartDashboard.putData(m_drivetrain);
@@ -73,7 +113,54 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		m_autonomousCommand.start(); // schedule the autonomous command (example)
+		
+		
+		
+		Command autoCommand = chooser.getSelected();
+		if(autoCommand instanceof PathCommand) {
+			PathCommand pathCommand = (PathCommand) autoCommand;
+			String signal = "";
+			while(!signalRecieved) {
+				signal = driverStation.getGameSpecificMessage();
+				if(signal.length()==3) {
+					signalRecieved = true;
+				}
+			}
+			if(signal.length()<=0) {
+				new DriveStraightDistance(4000,0.75).start();
+			}
+			else {
+				char first = signal.charAt(0);
+				char second = signal.charAt(1);
+				int position = driverStation.getLocation();
+				PathCommand.TARGET target = getTarget(first,position);
+				pathCommand.start(target==PathCommand.TARGET.SWITCH ? getSide(first) : getSide(second), target, position==2);
+			}
+		}
+		else autoCommand.start();
+//		String signal = driverStation.getGameSpecificMessage();
+//		int position = (int) SmartDashboard.getNumber("start", 1);
+//		m_autonomousCommand.start(signal,position); // schedule the autonomous command (example)
+	}
+	
+	private PathCommand.TARGET getTarget(char first, int position) {
+		if(position==2) {
+			return PathCommand.TARGET.SWITCH;
+		}
+		else if(position==1) {
+			if(first=='L') {
+				return PathCommand.TARGET.SWITCH;
+			}
+			return PathCommand.TARGET.SCALE;
+		}
+		else if(first=='R') {
+			return PathCommand.TARGET.SWITCH;
+		}
+		return PathCommand.TARGET.SCALE;
+	}
+	
+	private boolean getSide(char level) {
+		return level=='L';
 	}
 
 	/**
@@ -91,7 +178,7 @@ public class Robot extends IterativeRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		m_autonomousCommand.cancel();		
+		chooser.getSelected().cancel();		
 	}
 
 	/**
@@ -109,6 +196,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic(){
+		
+		if(!di.get()) {
+			System.out.println("Hit!");
+		}
 		//Testing xbox buttons, joysticks and triggers
 		OI.refreshAll();
 //		//System.out.println("Left Y = " + xbox.LeftStick.Y);
@@ -130,11 +221,32 @@ public class Robot extends IterativeRobot {
 	    //c.setClosedLoopControl(false);
 	}
 	
+	private void setupAutoCommands() {
+		
+		chooser = new SendableChooser<Command>();
+		
+		chooser.addDefault("Default (1.75m)", new DriveStraightDistance(1750,0.75));
+		chooser.addObject("Auto run", new PathCommand());
+		chooser.addObject("Left Short", new ShortRun(true));
+		chooser.addObject("Right Short", new ShortRun(false));
+		chooser.addObject("Left Long", new LongRun(true));
+		chooser.addObject("Right Long", new LongRun(false));
+		chooser.addObject("Center Right", new CenterRun(true));
+		chooser.addObject("Center Left", new CenterRun(false));
+		
+		SmartDashboard.putData("Auto", chooser);
+		SmartDashboard.putNumber("AutoSpeed",0.75);
+		SmartDashboard.putNumber("deadzone", RobotMap.DEFAULT.CONTROLLER_DEADZONE);
+		SmartDashboard.putNumber("leftOff", RobotMap.PWM.LEFT_MOTOR_OFFSET);
+		SmartDashboard.putNumber("rightOff", RobotMap.PWM.RIGHT_MOTOR_OFFSET);
+	}
+	
 
 	/**
 	 * The log method puts interesting information to the SmartDashboard.
 	 */
-	private void log() {
+	
+	void log() {
 		m_drivetrain.log();
 		m_forklift.log();
 	}

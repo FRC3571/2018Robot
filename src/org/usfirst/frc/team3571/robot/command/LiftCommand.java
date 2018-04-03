@@ -34,7 +34,8 @@ public class LiftCommand extends Command {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return Robot.m_forklift.getLift().getSpeed()==0;
+		return Robot.m_forklift.getLift().first().getSpeed()==0 && 
+				Robot.m_forklift.getLift().second().getSpeed()==0;
 	}
 	
 	@Override

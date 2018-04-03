@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc.team3571.robot.Robot;
 
 /**
@@ -22,10 +24,13 @@ import org.usfirst.frc.team3571.robot.Robot;
 public class DriveStraightDistance extends Command {
 	private PIDController m_pid;
 	private double speed;
+	private double targetDistance;
 
 	public DriveStraightDistance(double distance) {
 		requires(Robot.m_drivetrain);
-		m_pid = new PIDController(4, 0, 0, new PIDSource() {
+		this.targetDistance = distance;
+		
+		/*m_pid = new PIDController(4, 0, 0, new PIDSource() {
 			PIDSourceType m_sourceType = PIDSourceType.kDisplacement;
 
 			@Override
@@ -45,7 +50,7 @@ public class DriveStraightDistance extends Command {
 		}, d -> Robot.m_drivetrain.drive(speed*d, speed*d));
 
 		m_pid.setAbsoluteTolerance(0.01);
-		m_pid.setSetpoint(distance);
+		m_pid.setSetpoint(distance);*/
 	}
 	
 	public DriveStraightDistance(double distance, double speed) {
@@ -58,21 +63,30 @@ public class DriveStraightDistance extends Command {
 	protected void initialize() {
 		// Get everything in a safe starting state.
 		Robot.m_drivetrain.reset();
-		m_pid.reset();
-		m_pid.enable();
+		//m_pid.reset();
+		//m_pid.enable();
+		this.speed = SmartDashboard.getNumber("AutoSpeed", 0.75);
+		//drive
+		Robot.m_drivetrain.drive(speed, speed);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return m_pid.onTarget();
+		double distance = Math.abs(Robot.m_drivetrain.getDistance());
+		if(distance>=targetDistance)
+			return true;
+		return false;
+				
+				/*m_pid.onTarget()*/
 	}
 
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
 		// Stop PID and the wheels
-		m_pid.disable();
+		//m_pid.disable();
+		Robot.m_drivetrain.reset();
 		Robot.m_drivetrain.drive(0, 0);
 	}
 }

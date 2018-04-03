@@ -40,7 +40,7 @@ public class Intake extends Subsystem {
 
 		//intake motors need to run in opposite directions
 
-		leftIntake.setInverted(RobotMap.PWM.MOTOR_INVERTED);
+		//leftIntake.setInverted(RobotMap.PWM.MOTOR_INVERTED);
 
 		
 

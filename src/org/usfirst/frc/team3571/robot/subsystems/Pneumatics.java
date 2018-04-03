@@ -25,6 +25,8 @@ public class Pneumatics extends Subsystem {
 	ArrayList<DoubleSolenoid> solenoidList;
 
 	boolean SHIFTSTATE;
+	
+	private boolean openState;
 
 	
 
@@ -159,7 +161,13 @@ public class Pneumatics extends Subsystem {
 		return SHIFTSTATE;
 
 	}
-
-
+	
+	public boolean getOpenState() {
+		return openState;
+	}
+	
+	public void setOpenState(boolean openState) {
+		this.openState = openState;
+	}
 
 }

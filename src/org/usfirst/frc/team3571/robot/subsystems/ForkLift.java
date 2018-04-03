@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3571.robot.subsystems;
 
 import org.usfirst.frc.team3571.robot.RobotMap;
+import org.usfirst.frc.team3571.robot.utilities.LiftGroup;
 import org.usfirst.frc.team3571.robot.utilities.Loggable;
 import org.usfirst.frc.team3571.robot.utilities.RobotMath;
 
@@ -13,7 +14,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ForkLift extends Subsystem implements Loggable  {
 	
 	
-	private Spark liftMotor = new Spark(RobotMap.PWM.FL_LIFT_MOTOR);
+	private Spark firstLiftMotor = new Spark(RobotMap.PWM.FL_LIFT_MOTOR);
+	private Spark secondLiftMotor = new Spark(RobotMap.PWM.FL_LIFT_MOTOR_SECOND);
+	private LiftGroup liftMotor = new LiftGroup(firstLiftMotor, secondLiftMotor);
 	//tilt
 	private Spark tiltMotor = new Spark(RobotMap.PWM.FL_TILT_MOTOR);
 	private DigitalInput topLimitSwitch = new DigitalInput(RobotMap.LIFT.TILT.TOP_LIMIT_SWITCH);
@@ -50,7 +53,8 @@ public class ForkLift extends Subsystem implements Loggable  {
 	public void log() {
 		//log any values here (will be shown on dashboard)
 		//SmartDashboard.putNumber(..)
-		SmartDashboard.putNumber("Lift motor", liftMotor.getPosition());
+		SmartDashboard.putNumber("Lift motor (first)", liftMotor.first().getPosition());
+		SmartDashboard.putNumber("Lift motor (second)", liftMotor.second().getPosition());
 		SmartDashboard.putNumber("Distance Encoder Rate", distanceEncoder.getRate());
 		SmartDashboard.putNumber("Distance Encoder Distance", distanceEncoder.getDistance());
 	}
@@ -60,7 +64,7 @@ public class ForkLift extends Subsystem implements Loggable  {
 		changeState();
 	}
 	
-	public Spark getLift() {
+	public LiftGroup getLift() {
 		return liftMotor;
 	}
 	

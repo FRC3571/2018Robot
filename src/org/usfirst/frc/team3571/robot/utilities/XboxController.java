@@ -3,6 +3,10 @@ package org.usfirst.frc.team3571.robot.utilities;
 import edu.wpi.first.wpilibj.buttons.Trigger;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.hal.HAL;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team3571.robot.RobotMap;
+
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
@@ -132,6 +136,9 @@ public class XboxController {
 	 * Reacquires the values for all inputs
 	 */
 	public void refresh() {
+		//set new deadzones
+		double deadZone = SmartDashboard.getNumber("deadzone", RobotMap.DEFAULT.CONTROLLER_DEADZONE);
+		setDeadZones(deadZone,deadZone);
 		//getDpad();
 		getLeftStick();
 		getRightStick();

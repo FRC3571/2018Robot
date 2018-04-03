@@ -22,12 +22,6 @@ public class ShiftGears extends Command {
 
 		 requires(Robot.m_pneumatics);
 
-		 Robot.m_pneumatics.createSolenoid(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID, 
-
-					RobotMap.PNEUMATICS.SOLENOID_ID_1, 
-
-					RobotMap.PNEUMATICS.SOLENOID_ID_2);
-
 	}
 
 	
@@ -38,7 +32,7 @@ public class ShiftGears extends Command {
 
     public void initialize(){
 
-    	if(!Robot.m_pneumatics.getShiftState()){
+    	if(!Robot.m_pneumatics.getShiftState()) {
 
     		Robot.m_pneumatics.solenoidForward(RobotMap.PNEUMATICS.GEARSHIFT_SOLENOID);
 

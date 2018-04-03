@@ -48,7 +48,7 @@ public class BoxIntake extends Command {
 
     protected void execute() {
 
-    	Robot.m_intake.runIntake(Robot.m_oi.getOperatorXboxControl());
+    	Robot.m_intake.runIntake(Robot.m_oi.getDriverXboxControl());
 
     }
 
