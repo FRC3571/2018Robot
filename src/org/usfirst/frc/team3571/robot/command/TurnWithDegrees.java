@@ -11,8 +11,8 @@ public class TurnWithDegrees extends Command {
 	
 	
 	private double distance; 
-	private double leftSpeed = 0.5;
-	private double rightSpeed = 0.5;
+	private double leftSpeed = 0.7;
+	private double rightSpeed = 0.7;
 	
 	public TurnWithDegrees(double degrees) {
 		if(degrees<0) {

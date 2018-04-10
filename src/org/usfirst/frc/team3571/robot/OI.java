@@ -54,6 +54,7 @@ public class OI {
 	
 	public static void refreshAll() {
 		driver.refresh();
+		operator.refresh();
 	}
 	
 	public XboxController getDriverXboxControl() {

@@ -20,7 +20,8 @@ public class LongRun extends CommandGroup {
 		addSequential(new DriveStraightDistance(7780));
 		addSequential(new TurnWithDegrees(turn));
 		addSequential(new DriveStraightDistance(500));
-		addSequential(new LiftCommand(RobotMap.LIFT.UP));
+		addSequential(new TimedLiftCommand(RobotMap.LIFT.UP));
+		addSequential(new TimedTiltCommand(RobotMap.LIFT.DOWN));
 		addSequential(new IntakeOut(false));
 	}
 	

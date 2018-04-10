@@ -5,6 +5,7 @@ import org.usfirst.frc.team3571.robot.path.PathCommand;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 
 public class ShortRun extends CommandGroup {
 	
@@ -12,16 +13,18 @@ public class ShortRun extends CommandGroup {
 	
 	public ShortRun(boolean left) {
 		if(left) {
-			turn = -90;
+			turn = -82;
 		}
 		else {
-			turn = 90;
+			turn = 82;
 		}
 		
-		addSequential(new DriveStraightDistance(4550));
+		addSequential(new DriveStraightDistance(3250));
+		addSequential(new TimedCommand(1));
 		addSequential(new TurnWithDegrees(turn));
-		addSequential(new DriveStraightDistance(500));
-		addSequential(new TiltCommand(RobotMap.LIFT.DOWN));
+		addSequential(new TimedCommand(1));
+		addSequential(new DriveStraightDistance(650));
+		addSequential(new TimedTiltCommand(RobotMap.LIFT.DOWN));
 		addSequential(new IntakeOut(false));
 	}
 	

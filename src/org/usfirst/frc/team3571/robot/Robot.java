@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
 	//public MPU6050 gyro = new MPU6050();
     //private Compressor c = new Compressor(0);
 	//private Encoder enc = new Encoder(0,1);
-	private DigitalInput di = new DigitalInput(9);
+	//private DigitalInput di = new DigitalInput(9);
 	
 	//for game input
 	private DriverStation driverStation; 
@@ -125,12 +125,13 @@ public class Robot extends IterativeRobot {
 				}
 			}
 			if(signal.length()<=0) {
+				System.out.println("signal not recieved");
 				new DriveStraightDistance(4000,0.75).start();
 			}
 			else {
 				char first = signal.charAt(0);
 				char second = signal.charAt(1);
-				int position = driverStation.getLocation();
+				int position = (int) SmartDashboard.getNumber("position", 2);
 				PathCommand.TARGET target = getTarget(first,position);
 				pathCommand.start(target==PathCommand.TARGET.SWITCH ? getSide(first) : getSide(second), target, position==2);
 			}
@@ -194,10 +195,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic(){
-		
-		if(!di.get()) {
-			System.out.println("Hit!");
-		}
 		//Testing xbox buttons, joysticks and triggers
 		OI.refreshAll();
 //		//System.out.println("Left Y = " + xbox.LeftStick.Y);
@@ -223,8 +220,8 @@ public class Robot extends IterativeRobot {
 		
 		chooser = new SendableChooser<Command>();
 		
-		chooser.addDefault("Default (1.75m)", new DriveStraightDistance(1750,0.75));
 		chooser.addObject("Auto run", new PathCommand());
+		chooser.addDefault("3.75m", new DriveStraightDistance(3750,0.5));
 		chooser.addObject("Left Short", new ShortRun(true));
 		chooser.addObject("Right Short", new ShortRun(false));
 		chooser.addObject("Left Long", new LongRun(true));
@@ -237,6 +234,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("deadzone", RobotMap.DEFAULT.CONTROLLER_DEADZONE);
 		SmartDashboard.putNumber("leftOff", RobotMap.PWM.LEFT_MOTOR_OFFSET);
 		SmartDashboard.putNumber("rightOff", RobotMap.PWM.RIGHT_MOTOR_OFFSET);
+		//1 left, 2 middle, 3 right (middle default position)
+		SmartDashboard.putNumber("position", 2);
 	}
 	
 

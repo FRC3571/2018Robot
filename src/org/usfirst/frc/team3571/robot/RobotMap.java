@@ -20,7 +20,7 @@ public class RobotMap {
 		public static final boolean MOTOR_INVERTED = true;
 		public static final boolean MOTOR_NOT_INVERTED = false;
 		public static final double LEFT_MOTOR_OFFSET = 1.0000;
-		public static final double RIGHT_MOTOR_OFFSET = 0.996;
+		public static final double RIGHT_MOTOR_OFFSET = 1.0000;
 		
 		// 4-9 Free
 		// 0-9 Free
@@ -36,7 +36,7 @@ public class RobotMap {
 		//time (in seconds) for intake to suck in/suck out during autonomous
 		public static final int AUTO_TIME = 3;
 		//intake motor speed during auto
-		public static final double SPEED = 0.95;
+		public static final double SPEED = 0.75;
 	}
 	
 	public static class ENCODER {
@@ -45,11 +45,11 @@ public class RobotMap {
 		public static final int FRONT_RIGHT_ENCODER_CHANNEL_A = 2;
 		public static final int FRONT_RIGHT_ENCODER_CHANNEL_B = 3;
 		//distance encoders for forklift
-		public static final int FL_DISTANCE_ENCODER_CHANNEL_A = 4;
-		public static final int FL_DISTANCE_ENCODER_CHANNEL_B = 5;
+		//public static final int FL_DISTANCE_ENCODER_CHANNEL_A = 4;
+		//public static final int FL_DISTANCE_ENCODER_CHANNEL_B = 5;
 		//tilt distance encoder
-		public static final int TILT_DISTANCE_ENCODER_CHANNEL_A = 0;
-		public static final int TILT_DISTANCE_ENCODER_CHANNEL_B = 0;
+		public static final int TILT_DISTANCE_ENCODER_CHANNEL_A = 6;
+		public static final int TILT_DISTANCE_ENCODER_CHANNEL_B = 7;
 		
 		public static final boolean REVERSE_DIRECTION = true;
 		public static final boolean FORWARD_DIRECTION = false;
@@ -60,9 +60,13 @@ public class RobotMap {
 		public static final double SCALE_HEIGHT = 1000;
 		public static final double TILT_DISTANCE = 100;
 		public static final double SWITCH_HEIGHT = 2000;
-		public static final double GEAR_RATIO_LOW = 6.05;//4.429;
-		public static final double GEAR_RATIO_HIGH = 2.083;
+		public static final double GEAR_RATIO_LOW = 4.6;
+		public static final double GEAR_RATIO_HIGH = 2.7;
 		
+	}
+	
+	public static class ANALOG {
+		public static final int FL_DISTANCE_ENCODER = 0;
 	}
 	
 	public static class LIFT {
@@ -70,32 +74,11 @@ public class RobotMap {
 		public static final boolean DOWN = false;
 		//used for timed lift, time for moving
 		public static final int TIME = 2;
+		public static final double SPEED = 0.99;
 		
 		public static class TILT {
 			public static final double SPEED = 0.4;
-			public static final int TIME = 1;
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+			public static final double TIME = .5;	
 			public static final int UP = 1;
 			public static final int MIDDLE = 2;
 			public static final int DOWN = 3;

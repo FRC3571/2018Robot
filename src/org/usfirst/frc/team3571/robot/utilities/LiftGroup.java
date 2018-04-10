@@ -13,7 +13,7 @@ public class LiftGroup {
 	}
 	
 	public void setSpeed(double speed) {
-		first.setSpeed(speed);
+		first.setSpeed(-speed);
 		second.setSpeed(speed);
 	}
 	

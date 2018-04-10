@@ -5,6 +5,9 @@ import org.usfirst.frc.team3571.robot.utilities.LiftGroup;
 import org.usfirst.frc.team3571.robot.utilities.Loggable;
 import org.usfirst.frc.team3571.robot.utilities.RobotMath;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogTrigger;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
@@ -19,11 +22,13 @@ public class ForkLift extends Subsystem implements Loggable  {
 	private LiftGroup liftMotor = new LiftGroup(firstLiftMotor, secondLiftMotor);
 	//tilt
 	private Spark tiltMotor = new Spark(RobotMap.PWM.FL_TILT_MOTOR);
-	//encoder
+	/*encoder
 	private Encoder distanceEncoder = new Encoder(RobotMap.ENCODER.FL_DISTANCE_ENCODER_CHANNEL_A,
 															RobotMap.ENCODER.FL_DISTANCE_ENCODER_CHANNEL_B,
 															RobotMap.ENCODER.REVERSE_DIRECTION,
-															 RobotMap.ENCODER.ENCODER_TYPE);
+															 RobotMap.ENCODER.ENCODER_TYPE);*/
+	private AnalogTrigger rawDistanceInput;
+	private Counter distanceEncoder; 
 	
 	private Encoder tiltEncoder = new Encoder(RobotMap.ENCODER.TILT_DISTANCE_ENCODER_CHANNEL_A,
 			RobotMap.ENCODER.TILT_DISTANCE_ENCODER_CHANNEL_B, RobotMap.ENCODER.REVERSE_DIRECTION, RobotMap.ENCODER.ENCODER_TYPE);
@@ -35,6 +40,11 @@ public class ForkLift extends Subsystem implements Loggable  {
 	
 	public ForkLift() {
 		super();
+		
+		//analog encoder
+		rawDistanceInput = new AnalogTrigger(0);
+		distanceEncoder = new Counter(rawDistanceInput);
+		
 		//current state
 		this.liftState = State.LIFT_BOTTOM;
 		this.tiltState = State.TILT_TOP;
@@ -80,7 +90,7 @@ public class ForkLift extends Subsystem implements Loggable  {
 		return tiltMotor;
 	}
 	
-	public Encoder getDistanceEncoder() {
+	public Counter getDistanceEncoder() {
 		return distanceEncoder;
 	}
 	

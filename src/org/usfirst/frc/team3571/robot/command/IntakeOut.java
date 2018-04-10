@@ -31,7 +31,7 @@ public class IntakeOut extends TimedCommand {
 	
 	@Override
 	protected void end() {
-		Robot.m_intake.runIntake(0);
+		Robot.m_intake.runIntake(0,null,false);
 	}
 
 }

@@ -41,6 +41,7 @@ public class Intake extends Subsystem {
 		//intake motors need to run in opposite directions
 
 		//leftIntake.setInverted(RobotMap.PWM.MOTOR_INVERTED);
+		rightIntake.setInverted(RobotMap.PWM.MOTOR_INVERTED);
 
 		
 
@@ -54,15 +55,38 @@ public class Intake extends Subsystem {
 
 	
 
-	public void runIntake(double speed){
+	public void runIntake(double speed, Spark intakeMotor, boolean isLeft){
+		
+		//intakeSpeedControl.set(speed);
+		if(intakeMotor==null) {
+			leftIntake.setSpeed(0);
+			rightIntake.setSpeed(0);
+			intakeSpeedControl.set(0);
+		}
+		else {
+			//hard limit 40% when pushing out
+			double abSpeed = Math.abs(speed);
+			if(abSpeed>=.4 && speed<0) {
+				speed = -.4;
+			}
+			
+			if(isLeft) {
+				intakeMotor.setSpeed(-speed);
+			}
+			else {
+				intakeMotor.setSpeed(speed);
+			}
+		}
 
+	}
+	
+	public void runIntake(double speed) {
 		intakeSpeedControl.set(speed);
-
 	}
 
 	
 
-	public void runIntake(XboxController xbox) {
+	/*public void runIntake(XboxController xbox) {
 
 		if(xbox.Triggers.Right > 0){
 
@@ -76,7 +100,15 @@ public class Intake extends Subsystem {
 
 		}
 
+	}*/
+	
+	
+	
+	public void runIntake(XboxController xbox) {
+		runIntake(xbox.RightStick.Y,leftIntake, false);
+		runIntake(xbox.LeftStick.Y, rightIntake, true);
 	}
+	
 
 	
 

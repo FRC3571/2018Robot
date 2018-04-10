@@ -68,7 +68,7 @@ public class BoxIntake extends Command {
 
     protected void end() {
 
-    	Robot.m_intake.runIntake(0);
+    	Robot.m_intake.runIntake(0,null,false);
 
     }
 

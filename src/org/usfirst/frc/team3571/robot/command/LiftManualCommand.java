@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3571.robot.command;
 
 import org.usfirst.frc.team3571.robot.Robot;
+import org.usfirst.frc.team3571.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -11,10 +12,10 @@ public class LiftManualCommand extends Command {
 	public LiftManualCommand(boolean up) {
 		requires(Robot.m_forklift);
 		if(up) {
-			speed = 0.9;
+			speed = RobotMap.LIFT.SPEED;
 		}
 		else {
-			speed = -0.9;
+			speed = -RobotMap.LIFT.SPEED;
 		}
 	}
 	
