@@ -7,6 +7,10 @@
 
 package org.usfirst.frc.team3571.robot;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -17,6 +21,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team3571.robot.command.Autonomous;
 import org.usfirst.frc.team3571.robot.command.CenterRun;
 import org.usfirst.frc.team3571.robot.command.DriveStraightDistance;
@@ -73,6 +80,29 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		
+		//CameraServer.getInstance().startAutomaticCapture(); //Minimum required for camera
+		
+		//new Thread(() -> {
+             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+             camera.setResolution(640, 480);
+             camera.setWhiteBalanceAuto();
+             camera.setFPS(20);
+             
+             //CvSink cvSink = CameraServer.getInstance().getVideo();
+             //CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+            /* 
+             Mat source = new Mat();
+             Mat output = new Mat();
+             
+             while(!Thread.interrupted()) {
+                 cvSink.grabFrame(source);
+                 Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+                 outputStream.putFrame(output);
+             }*/
+         //}).start();
+		
+		
 		
 		/**
 		 * 7780 long run
