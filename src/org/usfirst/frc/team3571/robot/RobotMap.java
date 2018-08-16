@@ -110,9 +110,9 @@ public class RobotMap {
 		
 		//shift
 
-		public static final int SOLENOID_ID_1 = 0;
+		public static final int SOLENOID_ID_1 = 6;
 
-		public static final int SOLENOID_ID_2 = 1;
+		public static final int SOLENOID_ID_2 = 7;
 		
 		//fork
 		

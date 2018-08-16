@@ -47,8 +47,8 @@ public class OI {
 		operator.Buttons.RB.runCommand(new LiftManualCommand(true), CommandState.WhilePressed);
 		operator.Buttons.LB.runCommand(new LiftManualCommand(false), CommandState.WhilePressed);
 		//driver.Buttons.RightStick.runCommand(new ShiftGears(), CommandState.WhenPressed);
-		//driver.Buttons.A.runCommand(new OpenCloseCommand(true), CommandState.WhenPressed);
-		//driver.Buttons.B.runCommand(new OpenCloseCommand(false), CommandState.WhenPressed);
+		driver.Buttons.A.runCommand(new OpenCloseCommand(true), CommandState.WhenPressed);
+		driver.Buttons.B.runCommand(new OpenCloseCommand(false), CommandState.WhenPressed);
 		
 	}
 	
