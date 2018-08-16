@@ -144,6 +144,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		
+		System.out.println("Init auto");
+		
 		Command autoCommand = chooser.getSelected();
 		if(autoCommand instanceof PathCommand) {
 			PathCommand pathCommand = (PathCommand) autoCommand;
@@ -154,7 +156,7 @@ public class Robot extends IterativeRobot {
 					signalRecieved = true;
 				}
 			}
-			if(signal.length()<=0) {
+			if(signal.length() <= 0) {
 				System.out.println("signal not recieved");
 				new DriveStraightDistance(4000,0.75).start();
 			}
