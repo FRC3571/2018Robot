@@ -106,7 +106,7 @@ public class Intake extends Subsystem {
 	
 	public void runIntake(XboxController xbox) {
 		runIntake(xbox.RightStick.Y,leftIntake, false);
-		runIntake(xbox.LeftStick.Y, rightIntake, true);
+		runIntake(xbox.LeftStick.Y, rightIntake, false);
 	}
 	
 

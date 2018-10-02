@@ -10,7 +10,7 @@ import org.usfirst.frc.team3571.robot.RobotMap;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
- * Handles Input from the Xbox Controller connected to the driver station.
+ * Handles Input from the Xbox Controller connected to the  station.
  * 
  * @author TomasR
  */

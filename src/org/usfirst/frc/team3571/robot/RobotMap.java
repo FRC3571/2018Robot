@@ -100,25 +100,25 @@ public class RobotMap {
 
 		public static final int PUMP_ID = 0;
 
-		public static final int GEARSHIFT_SOLENOID = 0;
+		public static final int GEARSHIFT_SOLENOID = 0; //0
 		
-		public static final int FORKLIFT_SOLENOID = 1;
+		public static final int FORKLIFT_SOLENOID = 1; //1
 
-		public static final int RAMP_SOLENOID_LEFT = 4;
+		//public static final int RAMP_SOLENOID_LEFT = 4; //4
 
-		public static final int RAMP_SOLENOID_RIGHT = 5;
+		//public static final int RAMP_SOLENOID_RIGHT = 5; //5
 		
 		//shift
 
-		public static final int SOLENOID_ID_1 = 6;
+		public static final int SOLENOID_ID_1 = 2; //6
 
-		public static final int SOLENOID_ID_2 = 7;
+		public static final int SOLENOID_ID_2 = 3; //7
 		
 		//fork
 		
-		public static final int SOLENOID_ID_3 = 2;
+		public static final int SOLENOID_ID_3 = 0; //2
 		
-		public static final int SOLENOID_ID_4 = 3;
+		public static final int SOLENOID_ID_4 = 1; //3
 
 		//public static final int SOLENOID_ID_3 = 3;
 
